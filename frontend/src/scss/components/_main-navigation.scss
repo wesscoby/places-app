@@ -24,6 +24,19 @@
 .main-navigation__title a {
   text-decoration: none;
   color: white;
+
+  div {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+
+    img {
+      width: 50px;
+      padding-right: 7px;
+    }
+  }
 }
 
 .main-navigation__header-nav {
