@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import { Backdrop } from '..';
-import { OnClickEvent } from '../../../types';
+import { OnClickEvent } from '../../../util';
 
 
 interface ModalOverlayProps {

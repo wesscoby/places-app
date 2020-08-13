@@ -1,6 +1,6 @@
-import React, { FC, useRef, useCallback, useEffect } from 'react';
+import React, { FC, useRef, useEffect } from 'react';
 
-import { LatLng } from '../../../types';
+import { LatLng } from '../../../util';
 
 
 declare global {

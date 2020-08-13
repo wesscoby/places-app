@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 
 import { Card, Button, Modal, Map } from '../';
-import { Place } from '../../types';
+import { Place } from '../../util';
 
 
 interface Props {
