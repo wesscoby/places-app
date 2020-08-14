@@ -35,8 +35,7 @@ const NewPlace: FC = () => {
         }}
       >
         {({ 
-          isSubmitting, errors, handleChange, 
-          handleBlur, values: { title }, isValid
+          isSubmitting, errors, values: { title }, isValid
         }) => (
           <Form>
             <Input
@@ -51,8 +50,6 @@ const NewPlace: FC = () => {
               name="description"
               placeholder={`Provide some information about ${title ? title : 'this place'}`}
               errorText={errors.description}
-              onChange={handleChange}
-              onBlur={handleBlur}
             />
             <Input
               label="Address"
