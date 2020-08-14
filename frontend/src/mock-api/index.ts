@@ -48,6 +48,12 @@ export default function () {
         return { places: user ? user.places.models : [] };
       });
 
+      this.get('/places/:pid', (schema: any, request) => {
+        const pid = request.params.pid;
+
+        return schema.places.find(pid);
+      })
+
       this.get('/users', (schema: any) => schema.users.all())
     },
   })
