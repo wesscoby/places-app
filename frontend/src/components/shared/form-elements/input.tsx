@@ -22,19 +22,15 @@ interface Props {
 
 const Input: FC<Props> = ({
   name, label, placeholder = '', type = 'text', textarea = false,
-  rows = 3, style = {}, className = '', errorText,
-  onChange, onBlur
+  rows = 3, style = {}, className = '', errorText
 }) => {
-
-
-
   const element = textarea ? (
-    <textarea 
+    <Field 
       id={name} 
-      rows={rows} 
-      onChange={onChange}
-      onBlur={onBlur}
-      placeholder={placeholder}
+      name={name} 
+      placeholder={placeholder} 
+      component="textarea"
+      rows={rows}
     />
   ) : (
     <Field 
