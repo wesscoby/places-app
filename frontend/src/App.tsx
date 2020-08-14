@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom';
 import { ReactQueryDevtools as RQD } from 'react-query-devtools';
 
-import { NewPlace, UserPlaces, Users } from './pages';
+import { NewPlace, UserPlaces, Users, UpdatePlace } from './pages';
 import { MainNavigation } from './components';
 
 
@@ -17,6 +17,7 @@ const App = () => {
           <Route path="/" exact component={Users} />
           <Route path="/:uid/places" exact component={UserPlaces} />
           <Route path="/places/new" exact component={NewPlace} />
+          <Route path="/places/:pid" component={UpdatePlace} />
           <Redirect to="/" />
         </Switch>
       </main>
