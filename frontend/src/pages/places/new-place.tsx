@@ -3,6 +3,7 @@ import { Formik, Form } from 'formik';
 
 import { Input, Button } from '../../components';
 import { newPlaceSchema } from '../../util';
+import { useNewPlaceMutation } from '../../hooks';
 
 
 interface NewPlaceSchema {
@@ -12,6 +13,7 @@ interface NewPlaceSchema {
 }
 
 const NewPlace: FC = () => {
+  const [mutate] = useNewPlaceMutation();
   const schemaValues: NewPlaceSchema = {
     title: '',
     description: '',
@@ -27,11 +29,18 @@ const NewPlace: FC = () => {
           { title, description, address }: NewPlaceSchema, 
           { setSubmitting }
         ) => {
-          console.log({ title, description, address })
           setSubmitting(true);
-          setTimeout(() => {
-            setSubmitting(false);
-          }, 3000);
+            // TODO Change hard-coded data [later]
+          mutate({
+            title, description, address,
+            location: {
+              lat: 5.611074,
+              lng: -0.069404
+            },
+            image: 'https://images.homify.com/image/upload/a_0,c_fill,f_auto,h_900,q_auto,w_1920/v1518452946/p/photo/image/2433418/Scene_2a.jpg',
+            userId: '4'
+          });
+          setSubmitting(false);
         }}
       >
         {({ 

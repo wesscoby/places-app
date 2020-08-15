@@ -31,13 +31,13 @@ export default function seeds(server: Server) {
   "image": "https://robohash.org/estmollitiaquo.png?size=250x250&set=set1"
   });
 
-  let ranice = server.create<string, ModelInstance<User>, User>('user', {
+  server.create<string, ModelInstance<User>, User>('user', {
     "name": "Ranice Farries",
   "email": "rfarries2@joomla.org",
   "image": "https://robohash.org/enimveniamveritatis.png?size=250x250&set=set1"
   });
 
-  let ab = server.create<string, ModelInstance<User>, User>('user', {
+  server.create<string, ModelInstance<User>, User>('user', {
   "name": "Ab Matterson",
   "email": "amatterson3@go.com",
   "image": "https://robohash.org/atautemex.png?size=250x250&set=set1"
