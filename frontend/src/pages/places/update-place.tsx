@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { Formik, Form } from 'formik';
 
 import { Input, Button, Card } from '../../components';
 import { updatePlaceSchema } from '../../util';
+import { useFetchPlaceById, useUpdatePlaceMutation } from '../../hooks';
 
 
 interface ParamTypes {
@@ -16,19 +16,13 @@ interface UpdatePlaceSchema {
   description: string;
 }
 
-const fetchPlaceById = async (pid: string) => {
-  const res = await fetch(`/api/places/${pid}`);
-  return res.json();
-}
-
 const UpdatePlace: FC = () => {
   const { pid } = useParams<ParamTypes>();
-  const { data, error, status } = useQuery(pid, fetchPlaceById, {
-    refetchOnWindowFocus: false
-  });
+  const { error, isLoading, data } = useFetchPlaceById(pid);
+  const [mutate] = useUpdatePlaceMutation(pid);
 
-  if(status === "loading") return <p>Loading...</p>;
-  if(status === "error") return <p>Error! {error?.message}</p>;
+  if(isLoading) return <p>Loading...</p>;
+  if(error) return <p>Error! {error?.message}</p>;
   
   if(!data) return (
     <div className="center">
@@ -52,11 +46,9 @@ const UpdatePlace: FC = () => {
           { title, description }: UpdatePlaceSchema,
           { setSubmitting }
         ) => {
-          console.log({ title, description })
           setSubmitting(true);
-          setTimeout(() => {
-            setSubmitting(false);
-          }, 3000);
+          mutate({ title, description });
+          setSubmitting(false);
         }}
       >
         {({ 
@@ -77,7 +69,7 @@ const UpdatePlace: FC = () => {
               errorText={errors.description}
             />
             <Button type="submit" disabled={isSubmitting || !isValid}>
-              UPDATE PLACE
+              {isSubmitting ? 'SUBMITTING...' : 'UPDATE PLACE'}
             </Button>
           </Form>
         )}
