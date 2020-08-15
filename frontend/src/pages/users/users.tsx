@@ -1,21 +1,14 @@
 import React, { FC } from 'react';
-import { useQuery } from 'react-query';
 
 import { UsersList } from '../../components';
+import { useUsers } from '../../hooks';
 
-
-const fetchAllPlaces = async () => {
-  let data = await fetch('/api/users');
-  return data.json();
-}
 
 const Users: FC = () => {
-  const { data, status, error } = useQuery('places', fetchAllPlaces, {
-    refetchOnWindowFocus: false
-  });
+  const { error, isLoading, data } = useUsers();
 
-  if(status === "loading") return <p>Loading...</p>;
-  if(status === "error") return <p>Error! {error?.message}</p>;
+  if(isLoading) return <p>Loading...</p>;
+  if(error) return <p>An error occurred: {error?.message}</p>;
 
   return <UsersList items={data.users} />
 }
