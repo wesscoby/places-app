@@ -54,6 +54,14 @@ export default function () {
         return schema.places.find(pid);
       })
 
+      this.patch("/places/:pid", (schema: any, request) => {
+        const pid = request.params.pid;
+        const data = JSON.parse(request.requestBody);
+
+        const place =  schema.places.find(pid);
+        return place.update(data);
+      })
+
       this.get('/users', (schema: any) => schema.users.all())
     },
   })
