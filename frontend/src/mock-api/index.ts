@@ -7,8 +7,9 @@ import seeds from './seeds';
 import routes from './routes';
 
 
-export default function () {
+export default function mockAPI({ environment = 'development' } = {}) {
   createServer({
+    environment,
     models: {
       user: Model.extend({ places: hasMany() }),
       place: Model.extend({ user: belongsTo() })
