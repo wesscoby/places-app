@@ -4,10 +4,10 @@ import ReactDOM from 'react-dom';
 import './scss/index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import mockApi from './mock-api';
+import mockAPI from './mock-api';
 
-
-mockApi();
+// Start Mock API
+mockAPI();
 
 ReactDOM.render(
   <React.StrictMode>
