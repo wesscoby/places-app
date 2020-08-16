@@ -3,7 +3,7 @@ import { Formik, Form } from 'formik';
 
 import { Input, Button } from '../../components';
 import { newPlaceSchema } from '../../util';
-import { useNewPlaceMutation } from '../../hooks';
+import { useAddPlace } from '../../hooks';
 
 
 interface NewPlaceSchema {
@@ -13,7 +13,7 @@ interface NewPlaceSchema {
 }
 
 const NewPlace: FC = () => {
-  const [mutate] = useNewPlaceMutation();
+  const [mutate] = useAddPlace();
   const schemaValues: NewPlaceSchema = {
     title: '',
     description: '',

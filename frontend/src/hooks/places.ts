@@ -10,21 +10,27 @@ export function useFetchPlaceById(pid: string) {
   });
 }
 
-export function useFetchPlacesByUserId(uid: string) {
+export function useGetPlacesByUser(uid: string) {
   return useQuery(['places/user', {uid}], async() => {
     const { data } = await api.get(`places/user/${uid}`);
     return data;
   });
 }
 
-export function useNewPlaceMutation() {
+export function useAddPlace() {
   return useMutation(async (formData: any) => {
     await api.post('places', formData);
   });
 }
 
-export function useUpdatePlaceMutation(pid: string) {
+export function useUpdatePlace(pid: string) {
   return useMutation(async (formData: any) => {
     await api.patch(`places/${pid}`, formData);
+  });
+}
+
+export function useDeletePlace(pid: string) {
+  return useMutation(async () => {
+    await api.delete(`places/${pid}`);
   });
 }

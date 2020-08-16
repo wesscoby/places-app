@@ -4,7 +4,7 @@ import { Formik, Form } from 'formik';
 
 import { Input, Button, Card } from '../../components';
 import { updatePlaceSchema } from '../../util';
-import { useFetchPlaceById, useUpdatePlaceMutation } from '../../hooks';
+import { useFetchPlaceById, useUpdatePlace } from '../../hooks';
 
 
 interface ParamTypes {
@@ -19,7 +19,7 @@ interface UpdatePlaceSchema {
 const UpdatePlace: FC = () => {
   const { pid } = useParams<ParamTypes>();
   const { error, isLoading, data } = useFetchPlaceById(pid);
-  const [mutate] = useUpdatePlaceMutation(pid);
+  const [mutate] = useUpdatePlace(pid);
 
   if(isLoading) return <p>Loading...</p>;
   if(error) return <p>Error! {error?.message}</p>;
