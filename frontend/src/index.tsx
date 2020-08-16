@@ -3,15 +3,20 @@ import ReactDOM from 'react-dom';
 
 import './scss/index.scss';
 import App from './App';
+import { AuthContextProvider } from './context';
 import * as serviceWorker from './serviceWorker';
 import mockAPI from './mock-api';
 
-// Start Mock API
-mockAPI();
+// Start Mock API in development
+if(process.env.NODE_ENV === 'development') {
+  mockAPI({ environment: 'development' });
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AuthContextProvider>
+      <App />
+    </AuthContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
