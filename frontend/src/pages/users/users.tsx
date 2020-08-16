@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 
 import { UsersList } from '../../components';
-import { useUsers } from '../../hooks';
+import { useGetAllUsers } from '../../hooks';
 
 
 const Users: FC = () => {
-  const { error, isLoading, data } = useUsers();
+  const { error, isLoading, data } = useGetAllUsers();
 
   if(isLoading) return <p>Loading...</p>;
   if(error) return <p>An error occurred: {error?.message}</p>;
