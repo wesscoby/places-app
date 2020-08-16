@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { PlaceList } from '../../components';
-import { useFetchPlacesByUserId } from '../../hooks';
+import { useGetPlacesByUser } from '../../hooks';
 
 
 interface ParamTypes {
@@ -11,7 +11,7 @@ interface ParamTypes {
 
 const UserPlaces: FC = () => {
   const { uid } = useParams<ParamTypes>();
-  const { data, isLoading, error } = useFetchPlacesByUserId(uid);
+  const { data, isLoading, error } = useGetPlacesByUser(uid);
 
   if(isLoading) return <p>Loading...</p>;
   if(error) return <p>Error! {error?.message}</p>;
