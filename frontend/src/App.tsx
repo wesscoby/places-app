@@ -1,37 +1,30 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { 
-  BrowserRouter as Router, Switch, Redirect, Route,
-} from 'react-router-dom';
+  BrowserRouter as Router } from 'react-router-dom';
 import { ReactQueryDevtools as RQD } from 'react-query-devtools';
 import { 
   ReactQueryConfigProvider, ReactQueryProviderConfig 
 } from 'react-query';
 
-import { NewPlace, UserPlaces, Users, UpdatePlace } from './pages';
 import { MainNavigation } from './components';
+import { Routes } from './routes';
 
 
 const queryConfig: ReactQueryProviderConfig = {
   queries: { refetchOnWindowFocus: false }
 }
 
-const App = () => {
+const App: FC = () => {
   return (
-    <Router>
-      <ReactQueryConfigProvider config={queryConfig}>
+    <ReactQueryConfigProvider config={queryConfig}>
+      <Router>
         <MainNavigation />
         <main>
-          <Switch>
-            <Route path="/" exact component={Users} />
-            <Route path="/:uid/places" exact component={UserPlaces} />
-            <Route path="/places/new" exact component={NewPlace} />
-            <Route path="/places/:pid" component={UpdatePlace} />
-            <Redirect to="/" />
-          </Switch>
+          <Routes />
         </main>
         <RQD initialIsOpen={false}/>
-      </ReactQueryConfigProvider>
-    </Router>
+      </Router>
+    </ReactQueryConfigProvider>
   );
 }
 

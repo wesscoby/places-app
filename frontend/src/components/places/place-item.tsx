@@ -1,8 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useContext } from 'react';
 
 import { Card, Button, Modal, Map } from '../';
 import { Place } from '../../util';
 import { useDeletePlace } from '../../hooks';
+import { AuthContext } from '../../context';
 
 
 interface Props {
@@ -15,6 +16,7 @@ const PlaceItem: FC<Props> = ({
     address, description, location 
   } 
 }) => {
+  const { isLoggedIn } = useContext(AuthContext);
   const [mutate] = useDeletePlace(id);
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false)
@@ -79,8 +81,14 @@ const PlaceItem: FC<Props> = ({
           </div>
           <div className="place-item__actions">
             <Button inverse onClick={openMapHandler}>VIEW ON MAP</Button>
-            <Button to={`/places/${id}`}>EDIT</Button>
-            <Button danger onClick={showDeleteWarningHandler}>DELETE</Button>
+            { isLoggedIn && (
+              <>
+                <Button to={`/places/${id}`}>EDIT</Button>
+                <Button danger onClick={showDeleteWarningHandler}>
+                  DELETE
+                </Button>
+              </>
+            )}
           </div>
         </Card>
       </li>
