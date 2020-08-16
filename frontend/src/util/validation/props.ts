@@ -18,3 +18,12 @@ export const email = Str()
 export const address = Str()
                         .max(50, 'Too long [Maximum length: 50 characters]')
                         .required('Required');
+
+export const password = Str()
+                          .min(6, 'Too short')
+                          .required('Password required');
+
+export const name = Str()
+                    .min(3, 'Too short [Minimum length: 3 characters]')
+                    .max(30, 'Too long [Maximum length: 30 characters]')
+                    .required('Required');
