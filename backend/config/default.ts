@@ -4,10 +4,14 @@ config();
 const { env } = process;
 
 export default {
-  env: {
-    port: env.PORT,
-    mongodbUrl: env.MONGODB_URL,
-    bcryptSaltRounds: env.BCRYPT_SALT_ROUNDS,
-    jwtSecret: env.JWT_SECRET
+  port: env.PORT,
+  database: {
+    url: env.MONGODB_URL
+  },
+  bcrypt: {
+    rounds: env.BCRYPT_SALT_ROUNDS
+  },
+  jwt: {
+    secret: env.JWT_SECRET
   }
 }
