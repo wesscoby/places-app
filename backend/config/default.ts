@@ -4,7 +4,13 @@ config();
 const { env } = process;
 
 export default {
-  port: env.PORT,
+  app: {
+    host: env.API_HOST,
+    port: env.PORT
+  },
+  api: {
+    prefix: env.API_URL_GLOBAL_PREFIX
+  },
   database: {
     url: env.MONGODB_URL
   },
