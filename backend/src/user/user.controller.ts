@@ -8,9 +8,8 @@ import {
 import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { UserService } from './user.service';
-import { User } from './user.model';
 import { TransformInterceptor } from '../shared'
-import { UpdateUserDTO, CreateUserDTO, UserDTO } from './user.dto';
+import { UserModel, UpdateUserDto, CreateUserDto, User } from './models';
 
 
 @Controller('users')
@@ -22,17 +21,17 @@ export class UserController {
     @InjectMapper() private readonly mapper: AutoMapper
   ) {}
 
-  public toDto(user: User): UserDTO {
-    return this.mapper.map(user, UserDTO, User);
+  public toDto(user: UserModel): User {
+    return this.mapper.map(user, User, UserModel);
   }
 
-  public toDtoArray(users: User[]): UserDTO[] {
-    return this.mapper.mapArray(users, UserDTO, User);
+  public toDtoArray(users: UserModel[]): User[] {
+    return this.mapper.mapArray(users, User, UserModel);
   }
 
   @Get()
   @ApiOperation({ summary: 'Retrieve list of all users' })
-  async getAll(): Promise<UserDTO[]> {
+  async getAll(): Promise<User[]> {
     const users = await this.users.getAll();
     return this.toDtoArray(users);
   }
@@ -44,7 +43,7 @@ export class UserController {
   @ApiParam({ name: 'uid', description: 'User ID' })
   async getOne(
     @Param('uid') uid: string
-  ): Promise<UserDTO> {
+  ): Promise<User> {
     const user = await this.users.getById(uid);
     return this.toDto(user);
   }
@@ -54,19 +53,19 @@ export class UserController {
     summary: 'Update a specific user by ID' 
   })
   @ApiParam({ name: 'uid', description: 'User ID' })
-  @ApiBody({ type: UpdateUserDTO, description: 'Data to update' })
+  @ApiBody({ type: UpdateUserDto, description: 'Data to update' })
   async update(
     @Param('uid') uid: string,
-    @Body() update: UpdateUserDTO
-  ): Promise<UserDTO> {
+    @Body() update: UpdateUserDto
+  ): Promise<User> {
     const updated = await this.users.update(uid, update);
     return this.toDto(updated);
   }
 
   @Post()
   @ApiOperation({ summary: 'Create new user (temp)' })
-  @ApiBody({ type: CreateUserDTO, description: 'New user data' })
-  async create(@Body() createUserDto: CreateUserDTO): Promise<UserDTO> {
+  @ApiBody({ type: CreateUserDto, description: 'New user data' })
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     const user = await this.users.create(createUserDto);
     return this.toDto(user);
   }

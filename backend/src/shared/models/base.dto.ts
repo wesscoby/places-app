@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { AutoMap } from 'nestjsx-automapper';
 
 
-export class BaseModelDTO {
+export class BaseDTO {
   @AutoMap()
   @ApiProperty({ type: String, format: 'date-time' })
   createdAt!: Date;

@@ -5,15 +5,15 @@ import * as FindOrCreate from 'mongoose-findorcreate';
 import * as AutoPopulate from 'mongoose-autopopulate';
 import { AutoMap } from 'nestjsx-automapper';
 
-import { hashPassword } from './user.helper';
-import { BaseModel, schemaOptions } from '../shared';
-import { Place } from '../places';
+import { hashPassword } from '../user.helper';
+import { BaseModel, schemaOptions } from '../../shared';
+import { PlacesModel } from '../../places';
 
 
 @plugin(AutoPopulate)
 @plugin(FindOrCreate)
 @modelOptions({ schemaOptions })
-@pre<User>('save', async function(next) {
+@pre<UserModel>('save', async function(next) {
   if(!this.isNew) return next();
 
   try {
@@ -23,7 +23,7 @@ import { Place } from '../places';
     next(error); 
   }
 })
-class User extends BaseModel<User> {
+export class UserModel extends BaseModel<UserModel> {
   @prop()
   @AutoMap()
   public name!: string;
@@ -39,9 +39,7 @@ class User extends BaseModel<User> {
   @AutoMap()
   public avatar?: string;
 
-  @AutoMap(() => Place)
+  @AutoMap(() => PlacesModel)
   @prop({ autopopulate: true, ref: 'Place' })
-  public places!: Ref<Place>[];
+  public places!: Ref<PlacesModel>[];
 }
-
-export { User };

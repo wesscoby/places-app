@@ -3,13 +3,13 @@ import { TypegooseModule as TM } from 'nestjs-typegoose';
 
 import { PlacesService } from './places.service';
 import { PlacesController } from './places.controller';
-import { Place } from './places.model';
+import { PlacesModel } from './models';
 import './places.profile';
 
 
 @Global()
 @Module({
-  imports: [TM.forFeature([Place])],
+  imports: [TM.forFeature([PlacesModel])],
   providers: [PlacesService],
   controllers: [PlacesController],
   exports: [PlacesService]

@@ -1,10 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { AutoMap } from 'nestjsx-automapper';
 
-import { BaseModelDTO } from '../shared';
-import { UserDTO } from '../user';
+import { BaseDTO } from '../../shared';
+import { User } from '../../user';
 
-export class LocationDTO {
+export class Coordinates {
   @AutoMap()
   @ApiProperty({ description: 'Latitude' })
   readonly lat!: number;
@@ -14,7 +14,7 @@ export class LocationDTO {
   readonly lng!: number;
 }
 
-export class PlaceDTO extends BaseModelDTO {
+export class Place extends BaseDTO {
   @AutoMap()
   @ApiProperty()
   readonly title: string;
@@ -27,20 +27,20 @@ export class PlaceDTO extends BaseModelDTO {
   @ApiProperty()
   readonly address: string;
 
-  @AutoMap(() => LocationDTO)
-  @ApiProperty({ type: LocationDTO })
-  readonly location!: LocationDTO;
+  @AutoMap(() => Coordinates)
+  @ApiProperty({ type: Coordinates })
+  readonly coordinates!: Coordinates;
 
   @AutoMap()
   @ApiPropertyOptional()
   readonly image?: string;
 
-  @AutoMap(() => UserDTO)
-  @ApiProperty({ type: UserDTO })
-  readonly creator!: UserDTO;
+  @AutoMap(() => User)
+  @ApiProperty({ type: () => User })
+  readonly creator!: User;
 }
 
-export class CreatePlaceDTO {
+export class CreatePlaceDto {
   @ApiProperty()
   readonly title: string;
 
@@ -50,9 +50,9 @@ export class CreatePlaceDTO {
   @ApiProperty()
   readonly address: string;
 
-  @AutoMap(() => LocationDTO)
-  @ApiProperty({ type: LocationDTO })
-  readonly location!: LocationDTO;
+  @AutoMap(() => Coordinates)
+  @ApiProperty({ type: Coordinates })
+  readonly coordinates!: Coordinates;
 
   @AutoMap()
   @ApiPropertyOptional()

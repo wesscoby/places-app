@@ -8,9 +8,7 @@ import {
 import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { PlacesService } from './places.service';
-import { Place } from './places.model';
-import { PlaceDTO, CreatePlaceDTO, UpdatePlaceDto } from './places.dto';
-// import { UserService } from '../user';
+import { Place, PlacesModel, CreatePlaceDto, UpdatePlaceDto } from './models';
 import { TransformInterceptor } from '../shared';
 
 
@@ -23,12 +21,12 @@ export class PlacesController {
     @InjectMapper() private readonly mapper: AutoMapper
   ) {}
 
-  public toDto(place: Place): PlaceDTO {
-    return this.mapper.map(place, PlaceDTO, Place);
+  public toDto(place: PlacesModel): Place {
+    return this.mapper.map(place, Place, PlacesModel);
   }
 
-  public toDtoArray(places: Place[]): PlaceDTO[] {
-    return this.mapper.mapArray(places, PlaceDTO, Place);
+  public toDtoArray(places: PlacesModel[]): Place[] {
+    return this.mapper.mapArray(places, Place, PlacesModel);
   }
 
   @Get(':pid')
@@ -36,7 +34,7 @@ export class PlacesController {
   @ApiParam({ name: 'pid', description: 'Place ID' })
   async readOne(
     @Param('pid') pid: string
-  ): Promise<PlaceDTO> {
+  ): Promise<Place> {
     const place = await this.places.getById(pid);
     return this.toDto(place);
   }
@@ -47,7 +45,7 @@ export class PlacesController {
   @ApiParam({ name: 'uid', description: 'User ID' })
   async readPlacesByUser(
     @Param('uid') uid: string
-  ): Promise<PlaceDTO[]> {
+  ): Promise<Place[]> {
     const all = await this.readAll();
     const places = all.filter(place => place.creator.id === uid)
     return places;
@@ -56,7 +54,7 @@ export class PlacesController {
 
   @Get()
   @ApiOperation({ summary: 'Retrieve list of all places' })
-  async readAll(): Promise<PlaceDTO[]> {
+  async readAll(): Promise<Place[]> {
     const places =  await this.places.getAll();
     return this.toDtoArray(places);
   }
@@ -66,11 +64,11 @@ export class PlacesController {
   @ApiOperation({ summary: 'Create a new place' })
   @ApiCreatedResponse({ 
     description: 'The record has been successfully created.',
-    type: PlaceDTO
+    type: Place
   })
   async create(
-    @Body() place: CreatePlaceDTO
-  ): Promise<PlaceDTO> {
+    @Body() place: CreatePlaceDto
+  ): Promise<Place> {
     const createdPlace =  await this.places.create(place);
     return this.toDto(createdPlace);
   }
@@ -79,14 +77,14 @@ export class PlacesController {
   @Patch(':pid')
   @ApiOperation({ summary: 'Update a place by ID' })
   @ApiParam({ name: 'pid', description: 'Place ID' })
-  // @ApiCreatedResponse({ 
-  //   description: 'The record has been successfully updated.',
-  //   type: Place
-  // })
+  @ApiCreatedResponse({ 
+    description: 'The record has been successfully updated.',
+    type: Place
+  })
   async update(
     @Param('pid') pid: string,
     @Body() update: UpdatePlaceDto
-  ): Promise<PlaceDTO> {
+  ): Promise<Place> {
     const updated = await this.places.update(pid, update);
     return this.toDto(updated);
   }
@@ -95,13 +93,13 @@ export class PlacesController {
   @Delete(':pid')
   @ApiOperation({ summary: 'Delete a place by ID' })
   @ApiParam({ name: 'pid', description: 'Place ID' })
-  // @ApiCreatedResponse({ 
-  //   description: 'The record has been successfully deleted.',
-  //   type: Place
-  // })
+  @ApiCreatedResponse({ 
+    description: 'The record has been successfully deleted.',
+    type: Place
+  })
   async delete(
     @Param('pid') pid
-  ): Promise<PlaceDTO> {
+  ): Promise<Place> {
     const deleted = await this.places.delete(pid);
     return this.toDto(deleted);
   }

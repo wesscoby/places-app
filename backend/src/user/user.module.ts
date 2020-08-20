@@ -3,12 +3,12 @@ import { TypegooseModule as TM } from 'nestjs-typegoose';
 
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { User } from './user.model';
+import { UserModel } from './models';
 import './user.profile';
 
 @Global()
 @Module({
-  imports: [TM.forFeature([User])],
+  imports: [TM.forFeature([UserModel])],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService]

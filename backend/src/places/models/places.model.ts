@@ -5,10 +5,10 @@ import * as FindOrCreate from 'mongoose-findorcreate';
 import * as AutoPopulate from 'mongoose-autopopulate';
 import { AutoMap  } from 'nestjsx-automapper';
 
-import { User } from '../user';
-import { BaseModel, schemaOptions } from '../shared';
+import { UserModel } from '../../user';
+import { BaseModel, schemaOptions } from '../../shared';
 
-export class Location {
+export class CoordinatesModel {
   @AutoMap()
   @prop()
   public lat!: number;
@@ -22,7 +22,7 @@ export class Location {
 @plugin(FindOrCreate)
 @plugin(AutoPopulate)
 @modelOptions({ schemaOptions })
-class Place extends BaseModel<Place> {
+export class PlacesModel extends BaseModel<PlacesModel> {
   @AutoMap()
   @prop()
   public title!: string;
@@ -35,17 +35,15 @@ class Place extends BaseModel<Place> {
   @prop()
   public address!: string;
 
-  @AutoMap(() => Location)
+  @AutoMap(() => CoordinatesModel)
   @prop({ _id: false })
-  public location!: Location;
+  public location!: CoordinatesModel;
 
   @AutoMap()
   @prop()
   public image?: string;
 
-  @AutoMap(() => User)
-  @prop({ ref: User, autopopulate: true })
-  public creator!: Ref<User>;
+  @AutoMap(() => UserModel)
+  @prop({ ref: UserModel, autopopulate: true })
+  public creator!: Ref<UserModel>;
 }
-
-export { Place };

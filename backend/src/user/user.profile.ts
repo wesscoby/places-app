@@ -1,8 +1,7 @@
 import { AutoMapper, Profile, ProfileBase, mapWith } from 'nestjsx-automapper';
 
-import { User } from './user.model';
-import { UserDTO } from './user.dto';
-import { PlaceDTO, Place } from "../places";
+import { UserModel, User } from './models';
+import { Place, PlacesModel } from "../places";
 
 
 @Profile()
@@ -10,10 +9,10 @@ export class UserProfile extends ProfileBase {
   constructor(mapper: AutoMapper) {
     super();
     mapper
-    .createMap(User, UserDTO)
+    .createMap(UserModel, User)
     .forMember(destination => destination.places,
-      mapWith(PlaceDTO, source => source.places,
-        () => Place
+      mapWith(Place, source => source.places,
+        () => PlacesModel
       )
     );
   }

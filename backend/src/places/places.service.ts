@@ -2,23 +2,22 @@ import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType as RMT } from '@typegoose/typegoose';
 
-import { Place } from './places.model';
-import { CreatePlaceDTO, UpdatePlaceDto } from './places.dto';
+import { PlacesModel, CreatePlaceDto, UpdatePlaceDto } from './models';
 import { BaseService } from '../shared';
-import { User, UserService } from '../user';
+import { UserModel, UserService } from '../user';
 
 
 @Injectable()
-export class PlacesService extends BaseService<Place> {
+export class PlacesService extends BaseService<PlacesModel> {
   constructor(
-    @InjectModel(Place) private readonly places: RMT<typeof Place>,
+    @InjectModel(PlacesModel) private readonly places: RMT<typeof PlacesModel>,
     private users: UserService
   ) {
     super(places);
   }
 
   // TODO Refactor after implementation of auth
-  async create(place: CreatePlaceDTO): Promise<Place> {
+  async create(place: CreatePlaceDto): Promise<PlacesModel> {
     const user = await this.users.getById("5f3d3e57d113bd4c1098a243");
 
     const newPlace = await this.places.findOrCreate({
@@ -28,7 +27,7 @@ export class PlacesService extends BaseService<Place> {
     return await newPlace.doc.toJSON();
   }
 
-  async update(id: string, updateDto: UpdatePlaceDto): Promise<Place> {
+  async update(id: string, updateDto: UpdatePlaceDto): Promise<PlacesModel> {
     const updated = await this.places.findByIdAndUpdate(id, updateDto);
     return updated.toJSON();
   }

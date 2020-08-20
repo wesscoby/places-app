@@ -1,11 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { AutoMap } from 'nestjsx-automapper';
 
-import { BaseModelDTO } from "../shared";
-import { PlaceDTO, Place } from "../places";
+import { BaseDTO } from "../../shared";
+import { Place } from "../../places";
 
 
-export class UserDTO extends BaseModelDTO {
+export class User extends BaseDTO {
   @AutoMap()
   @ApiProperty()
   readonly name!: string;
@@ -18,12 +18,12 @@ export class UserDTO extends BaseModelDTO {
   @ApiPropertyOptional()
   readonly avatar?: string;
 
-  @AutoMap(() => PlaceDTO)
-  @ApiProperty({ type: () => [PlaceDTO] })
-  readonly places!: PlaceDTO[];
+  @AutoMap(() => Place)
+  @ApiProperty({ type: () => [Place] })
+  readonly places!: Place[];
 }
 
-export class CreateUserDTO {
+export class CreateUserDto {
   @ApiProperty()
   readonly name: string;
 
@@ -38,7 +38,7 @@ export class CreateUserDTO {
 }
 
 
-export class LoginUserDTO {
+export class LoginUserDto {
   @ApiProperty()
   readonly email: string;
 
@@ -46,7 +46,7 @@ export class LoginUserDTO {
   readonly password: string;
 }
 
-export class UpdateUserDTO {
+export class UpdateUserDto {
   @ApiPropertyOptional()
   readonly name?: string;
 
