@@ -13,28 +13,40 @@ export abstract class BaseService<T> {
   }
 
   async getOne(filter = {}): Promise<T> {
-    const data = await this._model.findOne(filter);
-    if(!data) throw new NotFoundException();
-    return data.toJSON();
+    try {
+      const data = await this._model.findOne(filter);
+      if(!data) throw new NotFoundException();
+      return data.toJSON();
+    } catch(error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   async getById(id: string): Promise<T> {
-    const data = await this._model.findById(this.toObjectId(id));
-    if(!data) throw new NotFoundException();
-    return data.toJSON();
+    try {
+      const data = await this._model.findById(this.toObjectId(id));
+      if(!data) throw new NotFoundException();
+      return data.toJSON();
+    } catch(error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   async delete(id: string): Promise<T> {
-    const data =  await this._model.findByIdAndRemove(this.toObjectId(id));
-    if(!data) throw new NotFoundException();
-    return data.toJSON();
+    try {
+      const data =  await this._model.findByIdAndRemove(this.toObjectId(id));
+      if(!data) throw new NotFoundException();
+      return data.toJSON();
+    } catch(error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   async clearCollection(filter = {}): Promise<{ ok?: number; n?: number; }> {
     return await this._model.deleteMany(filter);
   }
 
-  private toObjectId(id: string): Types.ObjectId {
+  public toObjectId(id: string): Types.ObjectId {
     return Types.ObjectId(id);
   }
 }

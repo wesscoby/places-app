@@ -1,28 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType as RMT } from '@typegoose/typegoose';
 
 import { Place } from './places.model';
 import { CreatePlaceDTO, UpdatePlaceDto } from './places.dto';
 import { BaseService } from '../shared';
-// import { UserService } from 'src/user/user.service';
+import { User, UserService } from '../user';
 
 
 @Injectable()
 export class PlacesService extends BaseService<Place> {
   constructor(
     @InjectModel(Place) private readonly places: RMT<typeof Place>,
+    private users: UserService
   ) {
     super(places);
   }
 
+  // TODO Refactor after implementation of auth
   async create(place: CreatePlaceDTO): Promise<Place> {
-    // const user = await this.users.findById("5f3be7dba25ce972963f86c1");
+    const user = await this.users.getById("5f3d3e57d113bd4c1098a243");
+
     const newPlace = await this.places.findOrCreate({
-      ...place
+      ...place, 
+      creator: this.toObjectId(user.id)
     });
-    // await user.places.push(newPlace.doc.toObject({ getters: true }));
-    // await user.
     return await newPlace.doc.toJSON();
   }
 

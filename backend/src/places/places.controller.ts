@@ -1,6 +1,6 @@
 import { 
   Controller, Get, Post, Body, Res, Param, 
-  Patch, Delete
+  Patch, Delete, UseInterceptors
 } from '@nestjs/common';
 import { 
   ApiTags, ApiOperation, ApiCreatedResponse, ApiParam 
@@ -10,10 +10,13 @@ import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 import { PlacesService } from './places.service';
 import { Place } from './places.model';
 import { PlaceDTO, CreatePlaceDTO, UpdatePlaceDto } from './places.dto';
+// import { UserService } from '../user';
+import { TransformInterceptor } from '../shared';
 
 
 @Controller('places')
 @ApiTags('Places')
+@UseInterceptors(new TransformInterceptor())
 export class PlacesController {
   constructor(
     private readonly places: PlacesService,
@@ -32,27 +35,28 @@ export class PlacesController {
   @ApiOperation({ summary: 'Get a specific place by ID' })
   @ApiParam({ name: 'pid', description: 'Place ID' })
   async readOne(
-    @Param('pid') pid: string,
-    // @Res() res: Response
+    @Param('pid') pid: string
   ): Promise<PlaceDTO> {
     const place = await this.places.getById(pid);
     return this.toDto(place);
   }
 
 
-  // @Get('user/:uid')
-  // @ApiOperation({ summary: 'Retrieve list of all places for a given user ID' })
-  // @ApiParam({ name: 'uid', description: 'User ID' })
-  // async readPlacesByUser(
-  //   @Param('uid') uid: string
-  // ) {
-  //   return await { uid }
-  // }
+  @Get('user/:uid')
+  @ApiOperation({ summary: 'Retrieve list of all places for a given user ID' })
+  @ApiParam({ name: 'uid', description: 'User ID' })
+  async readPlacesByUser(
+    @Param('uid') uid: string
+  ): Promise<PlaceDTO[]> {
+    const all = await this.readAll();
+    const places = all.filter(place => place.creator.id === uid)
+    return places;
+  }
 
 
   @Get()
   @ApiOperation({ summary: 'Retrieve list of all places' })
-  async readAll(): Promise<Place[]> {
+  async readAll(): Promise<PlaceDTO[]> {
     const places =  await this.places.getAll();
     return this.toDtoArray(places);
   }
@@ -96,8 +100,7 @@ export class PlacesController {
   //   type: Place
   // })
   async delete(
-    @Param('pid') pid,
-    @Res() res
+    @Param('pid') pid
   ): Promise<PlaceDTO> {
     const deleted = await this.places.delete(pid);
     return this.toDto(deleted);

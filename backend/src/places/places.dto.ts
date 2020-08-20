@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { AutoMap } from 'nestjsx-automapper';
 
 import { BaseModelDTO } from '../shared';
+import { UserDTO } from '../user';
 
 export class LocationDTO {
   @AutoMap()
@@ -33,6 +34,10 @@ export class PlaceDTO extends BaseModelDTO {
   @AutoMap()
   @ApiPropertyOptional()
   readonly image?: string;
+
+  @AutoMap(() => UserDTO)
+  @ApiProperty({ type: UserDTO })
+  readonly creator!: UserDTO;
 }
 
 export class CreatePlaceDTO {

@@ -1,11 +1,11 @@
 import { 
-  prop, defaultClasses as DC, modelOptions, plugin, Ref
+  prop, modelOptions, plugin, Ref
 } from '@typegoose/typegoose';
 import * as FindOrCreate from 'mongoose-findorcreate';
 import * as AutoPopulate from 'mongoose-autopopulate';
 import { AutoMap  } from 'nestjsx-automapper';
 
-import { User } from '../user/user.model';
+import { User } from '../user';
 import { BaseModel, schemaOptions } from '../shared';
 
 export class Location {
@@ -42,6 +42,10 @@ class Place extends BaseModel<Place> {
   @AutoMap()
   @prop()
   public image?: string;
+
+  @AutoMap(() => User)
+  @prop({ ref: User, autopopulate: true })
+  public creator!: Ref<User>;
 }
 
 export { Place };

@@ -1,5 +1,6 @@
 import { 
-  Controller, Get, Post, Body, Param, Patch
+  Controller, Get, Post, Body, Param, Patch,
+  UseInterceptors
 } from '@nestjs/common';
 import { 
   ApiTags, ApiOperation, ApiParam, ApiBody
@@ -8,11 +9,12 @@ import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { UserService } from './user.service';
 import { User } from './user.model';
-// import { Place } from '../places/places.model';
+import { TransformInterceptor } from '../shared'
 import { UpdateUserDTO, CreateUserDTO, UserDTO } from './user.dto';
 
 
 @Controller('users')
+@UseInterceptors(new TransformInterceptor())
 @ApiTags('Users')
 export class UserController {
   constructor(
