@@ -7,7 +7,7 @@ import { AutoMap } from 'nestjsx-automapper';
 
 import { hashPassword } from './user.helper';
 import { BaseModel, schemaOptions } from '../shared';
-// import { Place } from '../places/places.model';
+import { Place } from '../places';
 
 
 @plugin(AutoPopulate)
@@ -39,9 +39,9 @@ class User extends BaseModel<User> {
   @AutoMap()
   public avatar?: string;
 
-  // @ApiProperty({ type: () => [Place] })
-  // @prop({ autopopulate: true, ref: 'Place' })
-  // public places!: Ref<Place>[];
+  @AutoMap(() => Place)
+  @prop({ autopopulate: true, ref: 'Place' })
+  public places!: Ref<Place>[];
 }
 
 export { User };
