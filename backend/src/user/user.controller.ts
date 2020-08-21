@@ -1,6 +1,6 @@
 import { 
   Controller, Get, Post, Body, Param, Patch,
-  UseInterceptors
+  UseInterceptors, UseGuards
 } from '@nestjs/common';
 import { 
   ApiTags, ApiOperation, ApiParam, ApiBody
@@ -9,7 +9,8 @@ import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { UserService } from './user.service';
 import { TransformInterceptor } from '../shared'
-import { UserModel, UpdateUserDto, CreateUserDto, User } from './models';
+import { UserModel, UpdateUserDto, User } from './models';
+import { Auth } from '../auth';
 
 
 @Controller('users')
@@ -49,6 +50,7 @@ export class UserController {
   }
 
   @Patch(':uid')
+  @Auth()
   @ApiOperation({ 
     summary: 'Update a specific user by ID' 
   })
@@ -60,13 +62,5 @@ export class UserController {
   ): Promise<User> {
     const updated = await this.users.update(uid, update);
     return this.toDto(updated);
-  }
-
-  @Post()
-  @ApiOperation({ summary: 'Create new user (temp)' })
-  @ApiBody({ type: CreateUserDto, description: 'New user data' })
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    const user = await this.users.create(createUserDto);
-    return this.toDto(user);
   }
 }
