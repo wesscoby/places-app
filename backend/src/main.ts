@@ -28,15 +28,22 @@ async function bootstrap() {
 
   const prefix = config.get<string>('api.prefix');
   const server = `${host}/${prefix}`;
-  const description = 'API Server for Places Application';
+  const description = '**API Server** for Places App - an app where users can share places *(with image and coordinates)* with other users';
+
   const options = new DocumentBuilder()
                       .setTitle('Places API')
                       .setDescription(description)
+                      .setContact(
+                        'WessCoby', 
+                        'https://github.com/wesscoby', 
+                        'cobygiven@gmail.com'
+                      )
                       .setVersion('1.0')
                       .addServer(server)
                       .addTag('Auth')
                       .addTag('Users')
                       .addTag('Places')
+                      .addBearerAuth()
                       .build();
 
   const document = SwaggerModule.createDocument(app, options);

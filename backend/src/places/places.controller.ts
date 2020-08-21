@@ -1,15 +1,16 @@
 import { 
-  Controller, Get, Post, Body, Res, Param, 
+  Controller, Get, Post, Body, Param, 
   Patch, Delete, UseInterceptors
 } from '@nestjs/common';
 import { 
-  ApiTags, ApiOperation, ApiCreatedResponse, ApiParam 
+  ApiTags, ApiOperation, ApiCreatedResponse, ApiParam, ApiBody
 } from '@nestjs/swagger';
 import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { PlacesService } from './places.service';
 import { Place, PlacesModel, CreatePlaceDto, UpdatePlaceDto } from './models';
 import { TransformInterceptor } from '../shared';
+import { Auth } from '../auth';
 
 
 @Controller('places')
@@ -55,16 +56,18 @@ export class PlacesController {
   @Get()
   @ApiOperation({ summary: 'Retrieve list of all places' })
   async readAll(): Promise<Place[]> {
-    const places =  await this.places.getAll();
+    const places = await this.places.getAll();
     return this.toDtoArray(places);
   }
 
-
+  // TODO Add id of authed user as param for `this.places.create`
   @Post()
   @ApiOperation({ summary: 'Create a new place' })
+  @Auth()
+  @ApiBody({ type: () => CreatePlaceDto })
   @ApiCreatedResponse({ 
     description: 'The record has been successfully created.',
-    type: Place
+    type: () => Place
   })
   async create(
     @Body() place: CreatePlaceDto
@@ -75,11 +78,13 @@ export class PlacesController {
 
 
   @Patch(':pid')
+  @Auth()
   @ApiOperation({ summary: 'Update a place by ID' })
   @ApiParam({ name: 'pid', description: 'Place ID' })
+  @ApiBody({ type: () => UpdatePlaceDto })
   @ApiCreatedResponse({ 
     description: 'The record has been successfully updated.',
-    type: Place
+    type: () => Place
   })
   async update(
     @Param('pid') pid: string,
@@ -91,11 +96,12 @@ export class PlacesController {
 
 
   @Delete(':pid')
+  @Auth()
   @ApiOperation({ summary: 'Delete a place by ID' })
   @ApiParam({ name: 'pid', description: 'Place ID' })
   @ApiCreatedResponse({ 
     description: 'The record has been successfully deleted.',
-    type: Place
+    type: () => Place
   })
   async delete(
     @Param('pid') pid

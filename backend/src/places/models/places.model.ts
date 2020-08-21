@@ -37,7 +37,7 @@ export class PlacesModel extends BaseModel<PlacesModel> {
 
   @AutoMap(() => CoordinatesModel)
   @prop({ _id: false })
-  public location!: CoordinatesModel;
+  public coordinates!: CoordinatesModel;
 
   @AutoMap()
   @prop()

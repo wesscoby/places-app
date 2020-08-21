@@ -1,10 +1,10 @@
 import { 
-  Injectable, NotFoundException, UnauthorizedException 
+  Injectable, NotFoundException, UnauthorizedException, ConflictException 
 } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType as RMT } from '@typegoose/typegoose';
 
-import { UserModel, CreateUserDto, UpdateUserDto } from './models';
+import { User, UserModel, CreateUserDto, UpdateUserDto } from './models';
 import { comparePasswords } from './user.helper';
 import { BaseService } from '../shared';
 
@@ -23,29 +23,30 @@ export class UserService extends BaseService<UserModel> {
     return user.toJSON();
   }
 
-  async create(user: CreateUserDto): Promise<UserModel> {
+  async create(user: CreateUserDto): Promise<User> {
     try {
       const newUser = await this.users.findOrCreate(user);
       return newUser.doc.toJSON();
     } catch(error) {
-      throw new NotFoundException(error); // TODO DuplicateUserExeption
+      throw new ConflictException(
+        `A user with email ${user.email} already exists`
+      );
     }
   }
 
   async update(id: string, update: UpdateUserDto) {
     return await this.users.findByIdAndUpdate(id, update);
   }
+  // TODO Add methods to add, update or delete `places` references
 
   async authenticateUser(
     email: string, password: string
-  ): Promise<UserModel> {
-    try {
-      const user = await this.getByEmail(email);
-      const same = await comparePasswords(password, user.password);
-      if(!same) throw new UnauthorizedException('Invalid credentials');
-    return user;
-    } catch(error) {
-      throw new UnauthorizedException(error);
-    }
+  ): Promise<User | null> {
+    const user = await this.users.findOne({ email });
+    if(!user) return null;
+    const same = await comparePasswords(password, user.password);
+    if(!same) return null;
+
+    return user.toJSON();
   }
 }

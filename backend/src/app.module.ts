@@ -2,11 +2,10 @@ import { Module } from '@nestjs/common';
 import { AutomapperModule as AM } from 'nestjsx-automapper';
 import { TypegooseModule as TM } from 'nestjs-typegoose';
 
-// import { AuthModule } from './auth/auth.module';
-import { AppController } from './app.controller';
-import { PlacesModule } from './places/';
-import { UserModule } from './user/user.module';
+import { PlacesModule } from './places';
+import { UserModule } from './user';
 import { ConfigService, SharedModule } from './shared';
+import { AuthModule } from './auth';
 
 
 const mongooseOptions = {
@@ -25,9 +24,10 @@ const url = config.get<string>('database.url');
     TM.forRoot(url, mongooseOptions),
     SharedModule,
     UserModule,
+    AuthModule,
     PlacesModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [],
 })
 export class AppModule {}

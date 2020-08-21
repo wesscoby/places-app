@@ -16,7 +16,7 @@ export class PlacesProfile extends ProfileBase {
       .forMember(destination => destination.coordinates, 
         mapWith(
           Coordinates,
-          source => source.location,
+          source => source.coordinates,
           () => CoordinatesModel
         )
       )
