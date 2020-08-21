@@ -1,5 +1,5 @@
 # Places App
-An application where users can share places (with image and location) with other users - a MERN Stack [course][course] by [@Academind][academind]
+An application where users can share places (with image and coordinates) with other users - a MERN Stack [course][course] by [@Academind][academind]
 
 ## About Course
 Currently learning and following the concepts in the course and coding along, but using a different approach and slightly different tools
