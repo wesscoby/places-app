@@ -21,7 +21,7 @@ export class CoordinatesModel {
 
 @plugin(FindOrCreate)
 @plugin(AutoPopulate)
-@modelOptions({ schemaOptions })
+@modelOptions({ schemaOptions: { ...schemaOptions, collection: 'places' }})
 export class PlacesModel extends BaseModel<PlacesModel> {
   @AutoMap()
   @prop()
