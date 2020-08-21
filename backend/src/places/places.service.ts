@@ -11,18 +11,18 @@ import { UserModel, UserService } from '../user';
 export class PlacesService extends BaseService<PlacesModel> {
   constructor(
     @InjectModel(PlacesModel) private readonly places: RMT<typeof PlacesModel>,
-    private users: UserService
+    // @Inject(UserService) private users: UserService
   ) {
     super(places);
   }
 
   // TODO Refactor after implementation of auth
   async create(place: CreatePlaceDto): Promise<PlacesModel> {
-    const user = await this.users.getById("5f3d3e57d113bd4c1098a243");
+    // const user = await this.users.getById("5f3d3e57d113bd4c1098a243");
 
     const newPlace = await this.places.findOrCreate({
       ...place, 
-      creator: this.toObjectId(user.id)
+      creator: this.toObjectId("5f3dc037f0ff225139223fae")
     });
     return await newPlace.doc.toJSON();
   }
