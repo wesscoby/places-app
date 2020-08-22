@@ -1,14 +1,18 @@
 import { 
-  ApiProperty, ApiPropertyOptional
+  ApiProperty, ApiPropertyOptional, OmitType, 
+  PickType, PartialType
 } from "@nestjs/swagger";
 import { AutoMap } from 'nestjsx-automapper';
 
-import { BaseDTO } from "../../shared";
 import { Place } from "../../places";
 import { Role } from '../../auth';
 
 
-export class User extends BaseDTO {
+export class User {
+  @AutoMap()
+  @ApiProperty() 
+  readonly id!: string;
+
   @AutoMap()
   @ApiProperty()
   readonly name!: string;
@@ -21,42 +25,29 @@ export class User extends BaseDTO {
   @ApiPropertyOptional()
   readonly avatar?: string;
 
-  @AutoMap()
   @ApiProperty({ enum: Role, default: Role.USER })
   readonly role!: Role;
 
   @AutoMap(() => Place)
-  @ApiProperty({ type: () => [Place] })
+  @ApiProperty({ type:  [Place]})
   readonly places!: Place[];
+
+  @ApiProperty({ type: String, format: 'date-time' })
+  createdAt!: Date;
+
+  @ApiProperty({ type: String, format: 'date-time' })
+  updatedAt!: Date;
 }
 
-export class CreateUserDto {
-  @ApiProperty()
-  readonly name: string;
-
-  @ApiProperty()
-  readonly email: string;
-
-  @ApiProperty()
-  readonly password!: string;
-
-  @ApiPropertyOptional()
-  readonly avatar?: string;
-}
-
-
-export class LoginUserDto {
-  @ApiProperty()
-  readonly email: string;
-
+export class LoginUserDto extends PickType(User, ['email'] as const) {
   @ApiProperty()
   readonly password: string;
 }
 
-export class UpdateUserDto {
-  @ApiPropertyOptional()
-  readonly name?: string;
+export class CreateUserDto extends PickType(
+  User, ['id', 'name', 'email', 'avatar'] as const
+) {}
 
-  @ApiPropertyOptional()
-  readonly avatar?: string;
-}
+export class UpdateUserDto extends PartialType(
+  OmitType(CreateUserDto, ['email', 'id'] as const)
+) {}
