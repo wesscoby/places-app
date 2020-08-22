@@ -8,9 +8,9 @@ import {
 import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { PlacesService } from './places.service';
-import { Place, PlacesModel, CreatePlaceDto, UpdatePlaceDto } from './models';
+import { Place, Places, PlacesModel, CreatePlaceDto, UpdatePlaceDto } from './models';
 import { TransformInterceptor } from '../shared';
-import { Auth } from '../auth';
+import { Auth, ReqUser } from '../auth';
 
 
 @Controller('places')
@@ -47,9 +47,8 @@ export class PlacesController {
   async readPlacesByUser(
     @Param('uid') uid: string
   ): Promise<Place[]> {
-    const all = await this.readAll();
-    const places = all.filter(place => place.creator.id === uid)
-    return places;
+    const places = await this.places.getPlacesByUser(uid);
+    return this.toDtoArray(places);
   }
 
 
@@ -70,9 +69,10 @@ export class PlacesController {
     type: () => Place
   })
   async create(
+    @ReqUser('id') uid: string,
     @Body() place: CreatePlaceDto
   ): Promise<Place> {
-    const createdPlace =  await this.places.create(place);
+    const createdPlace =  await this.places.createPlace(uid, place);
     return this.toDto(createdPlace);
   }
 
@@ -105,7 +105,7 @@ export class PlacesController {
   })
   async delete(
     @Param('pid') pid
-  ): Promise<Place> {
+  ): Promise<any> {
     const deleted = await this.places.delete(pid);
     return this.toDto(deleted);
   }
