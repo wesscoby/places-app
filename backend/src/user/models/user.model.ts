@@ -45,6 +45,9 @@ export class UserModel extends BaseModel<UserModel> {
   public role!: Role
 
   @AutoMap(() => PlacesModel)
-  @prop({ autopopulate: true, ref: 'PlacesModel' })
+  @prop({
+    ref: 'PlacesModel', 
+    autopopulate: { select: '-creator', maxDepth: 1 }
+  })
   public places!: Ref<PlacesModel>[];
 }
