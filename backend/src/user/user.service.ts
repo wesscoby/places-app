@@ -17,6 +17,7 @@ export class UserService extends BaseService<UserModel> {
     super(users);
   }
 
+
   async getByEmail(email: string): Promise<UserModel> {
     const user = await this._model.findOne({ email });
     if(!user) throw new NotFoundException();
@@ -37,7 +38,6 @@ export class UserService extends BaseService<UserModel> {
   async update(id: string, update: UpdateUserDto) {
     return await this.users.findByIdAndUpdate(id, update);
   }
-  // TODO Add methods to add, update or delete `places` references
 
   async authenticateUser(
     email: string, password: string
