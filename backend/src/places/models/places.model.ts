@@ -8,6 +8,7 @@ import { AutoMap  } from 'nestjsx-automapper';
 import { UserModel } from '../../user';
 import { BaseModel, schemaOptions } from '../../shared';
 
+
 export class CoordinatesModel {
   @AutoMap()
   @prop()
@@ -17,7 +18,6 @@ export class CoordinatesModel {
   @prop()
   public lng!: number;
 }
-
 
 @plugin(FindOrCreate)
 @plugin(AutoPopulate)
@@ -44,6 +44,9 @@ export class PlacesModel extends BaseModel<PlacesModel> {
   public image?: string;
 
   @AutoMap(() => UserModel)
-  @prop({ ref: UserModel, autopopulate: true })
+  @prop({ 
+    ref: UserModel, 
+    autopopulate: { select: 'id name email avatar', maxDepth: 1 }
+  })
   public creator!: Ref<UserModel>;
 }
