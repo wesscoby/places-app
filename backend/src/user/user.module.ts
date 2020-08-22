@@ -6,11 +6,13 @@ import { UserService } from './user.service';
 import { UserModel } from './models';
 import './user.profile';
 import { AuthModule } from '../auth';
+import { PlacesModule } from '../places';
 
 
 @Module({
   imports: [
     forwardRef(() => AuthModule),
+    forwardRef(() => PlacesModule),
     TM.forFeature([UserModel])
   ],
   controllers: [UserController],
