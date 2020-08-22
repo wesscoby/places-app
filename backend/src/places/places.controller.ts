@@ -8,7 +8,7 @@ import {
 import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { PlacesService } from './places.service';
-import { Place, Places, PlacesModel, CreatePlaceDto, UpdatePlaceDto } from './models';
+import { Place, PlacesModel, CreatePlaceDto, UpdatePlaceDto } from './models';
 import { TransformInterceptor } from '../shared';
 import { Auth, ReqUser } from '../auth';
 
