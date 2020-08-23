@@ -28,7 +28,7 @@ export abstract class BaseService<T> {
 
   async getById(id: string): Promise<T> {
     try {
-      const data = await this._model.findById(this.toObjectId(id));
+      const data = await this._model.findById(this.ID(id));
       if(!data) throw new NotFoundException(`Item with id ${id} not found`);
       return data.toJSON();
     } catch(error) {
@@ -38,7 +38,7 @@ export abstract class BaseService<T> {
 
   async delete(id: string): Promise<any> {
     try {
-      const data =  await this._model.findById(this.toObjectId(id));
+      const data =  await this._model.findById(this.ID(id));
       if(!data) throw new NotFoundException();
 
       await data.remove();
@@ -52,7 +52,7 @@ export abstract class BaseService<T> {
     return await this._model.deleteMany(filter);
   }
 
-  public toObjectId(id: string): Types.ObjectId {
+  public ID(id: string): Types.ObjectId {
     return Types.ObjectId(id);
   }
 }
