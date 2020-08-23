@@ -1,16 +1,16 @@
 import { 
   Controller, Get, Post, Body, Param, 
-  Patch, Delete, UseInterceptors
+  Patch, Delete, UseInterceptors, Res, HttpStatus, UnauthorizedException
 } from '@nestjs/common';
 import { 
-  ApiTags, ApiOperation, ApiCreatedResponse, ApiParam, ApiBody
+  ApiTags, ApiOperation, ApiCreatedResponse, ApiParam, ApiBody, ApiNoContentResponse, ApiNotFoundResponse
 } from '@nestjs/swagger';
 import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { PlacesService } from './places.service';
 import { Place, PlacesModel, CreatePlaceDto, UpdatePlaceDto } from './models';
 import { TransformInterceptor } from '../shared';
-import { Auth, ReqUser } from '../auth';
+import { Auth, ReqUser, IsAdmin, isOwnPlace } from '../auth';
 
 
 @Controller('places')
@@ -30,6 +30,13 @@ export class PlacesController {
     return this.mapper.mapArray(places, Place, PlacesModel);
   }
 
+  @Get()
+  @ApiOperation({ summary: 'Retrieve list of all places' })
+  async readAll(): Promise<Place[]> {
+    const places = await this.places.getAll();
+    return this.toDtoArray(places);
+  }
+
   @Get(':pid')
   @ApiOperation({ summary: 'Get a specific place by ID' })
   @ApiParam({ name: 'pid', description: 'Place ID' })
@@ -42,7 +49,7 @@ export class PlacesController {
 
 
   @Get('user/:uid')
-  @ApiOperation({ summary: 'Retrieve list of all places for a given user ID' })
+  @ApiOperation({ summary: 'Retrieve list of all places by user' })
   @ApiParam({ name: 'uid', description: 'User ID' })
   async readPlacesByUser(
     @Param('uid') uid: string
@@ -52,14 +59,6 @@ export class PlacesController {
   }
 
 
-  @Get()
-  @ApiOperation({ summary: 'Retrieve list of all places' })
-  async readAll(): Promise<Place[]> {
-    const places = await this.places.getAll();
-    return this.toDtoArray(places);
-  }
-
-  // TODO Add id of authed user as param for `this.places.create`
   @Post()
   @ApiOperation({ summary: 'Create a new place' })
   @Auth()
@@ -79,7 +78,7 @@ export class PlacesController {
 
   @Patch(':pid')
   @Auth()
-  @ApiOperation({ summary: 'Update a place by ID' })
+  @ApiOperation({ summary: 'Update a place by ID (only "creator" is authorized)' })
   @ApiParam({ name: 'pid', description: 'Place ID' })
   @ApiBody({ type: () => UpdatePlaceDto })
   @ApiCreatedResponse({ 
@@ -87,26 +86,40 @@ export class PlacesController {
     type: () => Place
   })
   async update(
+    @ReqUser('id') uid: string,
     @Param('pid') pid: string,
     @Body() update: UpdatePlaceDto
   ): Promise<Place> {
-    const updated = await this.places.update(pid, update);
+    const place = await this.places.getById(pid);
+    if(
+      !isOwnPlace(uid, this.toDto(place))
+    ) throw new UnauthorizedException('You cannot modify this resource');
+
+    const updated = await this.places.updatePlace(pid, update);
     return this.toDto(updated);
   }
 
 
   @Delete(':pid')
   @Auth()
-  @ApiOperation({ summary: 'Delete a place by ID' })
-  @ApiParam({ name: 'pid', description: 'Place ID' })
-  @ApiCreatedResponse({ 
-    description: 'The record has been successfully deleted.',
-    type: () => Place
+  @ApiOperation({ 
+    summary: 'Delete a place by ID (only an admin or "creator" is authorized)' 
   })
+  @ApiParam({ name: 'pid', description: 'Place ID' })
+  @ApiNoContentResponse({ description: 'Successful' })
+  @ApiNotFoundResponse({ description: 'Not Found' })
   async delete(
-    @Param('pid') pid
-  ): Promise<any> {
-    const deleted = await this.places.delete(pid);
-    return this.toDto(deleted);
+    @IsAdmin() isAdmin: boolean,
+    @ReqUser('id') uid: string, 
+    @Param('pid') pid: string, 
+    @Res() res
+  ) {
+    const place = await this.places.getById(pid);
+    if(isAdmin || isOwnPlace(uid, this.toDto(place))) {
+      await this.places.deletePlace(pid, uid);
+      return res.status(HttpStatus.NO_CONTENT).json({});
+    } else {
+      throw new UnauthorizedException('You cannot delete this resource');
+    }
   }
 }
