@@ -3,11 +3,10 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType as RMT } from '@typegoose/typegoose';
-import { startSession, Types } from 'mongoose';
 
 import { PlacesModel, CreatePlaceDto, UpdatePlaceDto } from './models';
 import { BaseService } from '../shared';
-import { UserModel, UserService } from '../user';
+import { UserService } from '../user';
 
 
 @Injectable()
@@ -21,7 +20,7 @@ export class PlacesService extends BaseService<PlacesModel> {
 
   async getPlacesByUser(uid: string): Promise<PlacesModel[]> {
     try {
-      const places = await this.places.find({ creator: this.toObjectId(uid) });
+      const places = await this.places.find({ creator: this.ID(uid) });
       if(!places || places.length === 0) return [];
 
       return places.map(place => place.toJSON());
@@ -34,7 +33,7 @@ export class PlacesService extends BaseService<PlacesModel> {
     uid: string, placeDto: CreatePlaceDto
   ): Promise<PlacesModel> {
     try {
-      const user = await this.users.db.findById(this.toObjectId(uid));
+      const user = await this.users.db.findById(this.ID(uid));
       const place = await this.places.findOrCreate({
         ...placeDto, creator: user._id 
       });
@@ -47,11 +46,11 @@ export class PlacesService extends BaseService<PlacesModel> {
     }
   }
 
-  async update(
+  async updatePlace(
     pid: string, { title, description, image}: UpdatePlaceDto
   ): Promise<PlacesModel> {
     try {
-      const place = await this.places.findById(this.toObjectId(pid));
+      const place = await this.places.findById(this.ID(pid));
       if(!place) throw new NotFoundException(
         `Place with id ${pid} does not exist`
       );
@@ -66,4 +65,22 @@ export class PlacesService extends BaseService<PlacesModel> {
       throw new NotFoundException(error.message);
     }
   } 
+
+  async deletePlace(pid: string, uid: string) {
+    try {
+      const place = await this.places.findOne({ _id: this.ID(pid)});
+
+      if(!place) throw new NotFoundException(
+        `Place with id ${pid} does not exist`
+      );
+
+      await this.users.db.findOneAndUpdate(
+        { _id: this.ID(pid) }, 
+        { $pull: { "places._id": this.ID(pid) }}
+      );
+      await place.remove();
+    } catch(error) {
+      throw new NotFoundException(error.message);
+    }
+  }
 }
