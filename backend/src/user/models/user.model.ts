@@ -13,7 +13,7 @@ import { Role } from '../../auth';
 
 @plugin(AutoPopulate)
 @plugin(FindOrCreate)
-@modelOptions({ schemaOptions })
+@modelOptions({ schemaOptions: { ...schemaOptions, collection: 'users' }})
 @pre<UserModel>('save', async function(next) {
   if(!this.isNew) return next();
 
@@ -45,6 +45,9 @@ export class UserModel extends BaseModel<UserModel> {
   public role!: Role
 
   @AutoMap(() => PlacesModel)
-  @prop({ autopopulate: true, ref: 'PlacesModel' })
+  @prop({
+    ref: 'PlacesModel', 
+    autopopulate: { select: '-creator', maxDepth: 1 }
+  })
   public places!: Ref<PlacesModel>[];
 }

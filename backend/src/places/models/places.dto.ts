@@ -1,7 +1,8 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  ApiProperty, ApiPropertyOptional, OmitType, PickType, PartialType
+} from '@nestjs/swagger';
 import { AutoMap } from 'nestjsx-automapper';
 
-import { BaseDTO } from '../../shared';
 import { User } from '../../user';
 
 export class Coordinates {
@@ -14,18 +15,22 @@ export class Coordinates {
   readonly lng!: number;
 }
 
-export class Place extends BaseDTO {
+export class Place {
   @AutoMap()
-  @ApiProperty()
-  readonly title: string;
+  @ApiProperty() 
+  readonly id!: string;
 
   @AutoMap()
   @ApiProperty()
-  readonly description: string;
+  readonly title!: string;
 
   @AutoMap()
   @ApiProperty()
-  readonly address: string;
+  readonly description!: string;
+
+  @AutoMap()
+  @ApiProperty()
+  readonly address!: string;
 
   @AutoMap(() => Coordinates)
   @ApiProperty({ type: Coordinates })
@@ -35,37 +40,24 @@ export class Place extends BaseDTO {
   @ApiPropertyOptional()
   readonly image?: string;
 
+  @AutoMap()
+  @ApiProperty({ type: String, format: 'date-time' })
+  createdAt!: Date;
+
+  @AutoMap()
+  @ApiProperty({ type: String, format: 'date-time' })
+  updatedAt!: Date;
+
   @AutoMap(() => User)
-  @ApiProperty({ type: () => User })
+  @ApiProperty({ type: User })
   readonly creator!: User;
 }
 
-export class CreatePlaceDto {
-  @ApiProperty()
-  readonly title: string;
+export class CreatePlaceDto extends PickType(
+  Place,
+  ['title', 'description', 'address', 'coordinates', 'image'] as const
+) {}
 
-  @ApiProperty()
-  readonly description: string;
-
-  @ApiProperty()
-  readonly address: string;
-
-  @AutoMap(() => Coordinates)
-  @ApiProperty({ type: Coordinates })
-  readonly coordinates!: Coordinates;
-
-  @AutoMap()
-  @ApiPropertyOptional()
-  readonly image?: string;
-}
-
-export class UpdatePlaceDto {
-  @ApiPropertyOptional()
-  readonly title?: string;
-
-  @ApiPropertyOptional()
-  readonly description?: string;
-
-  @ApiPropertyOptional()
-  readonly image?: string;
-}
+export class UpdatePlaceDto extends PartialType(
+  PickType(Place, ['title', 'description', 'image'] as const)
+) {}

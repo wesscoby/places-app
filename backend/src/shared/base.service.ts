@@ -6,6 +6,10 @@ import { Types } from 'mongoose';
 @Injectable()
 export abstract class BaseService<T> {
   constructor(protected _model: ModelType<T>) {}
+
+  public get db() {
+    return this._model;
+  }
   
   async getAll(filter = {}): Promise<T[]> {
     const data = await this._model.find(filter);
@@ -24,19 +28,21 @@ export abstract class BaseService<T> {
 
   async getById(id: string): Promise<T> {
     try {
-      const data = await this._model.findById(this.toObjectId(id));
-      if(!data) throw new NotFoundException();
+      const data = await this._model.findById(this.ID(id));
+      if(!data) throw new NotFoundException(`Item with id ${id} not found`);
       return data.toJSON();
     } catch(error) {
       throw new NotFoundException(error.message);
     }
   }
 
-  async delete(id: string): Promise<T> {
+  async delete(id: string): Promise<any> {
     try {
-      const data =  await this._model.findByIdAndRemove(this.toObjectId(id));
+      const data =  await this._model.findById(this.ID(id));
       if(!data) throw new NotFoundException();
-      return data.toJSON();
+
+      await data.remove();
+      return { ok: true };
     } catch(error) {
       throw new NotFoundException(error.message);
     }
@@ -46,7 +52,7 @@ export abstract class BaseService<T> {
     return await this._model.deleteMany(filter);
   }
 
-  public toObjectId(id: string): Types.ObjectId {
+  public ID(id: string): Types.ObjectId {
     return Types.ObjectId(id);
   }
 }

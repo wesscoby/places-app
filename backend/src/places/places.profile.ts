@@ -1,7 +1,9 @@
-import { AutoMapper, Profile, ProfileBase, mapWith } from 'nestjsx-automapper';
+import { 
+  AutoMapper, Profile, ProfileBase, mapWith, ignore 
+} from 'nestjsx-automapper';
 
 import {
-  Place, Coordinates, PlacesModel, CoordinatesModel 
+  Place, Coordinates, PlacesModel, CoordinatesModel
 } from './models';
 import { UserModel, User } from '../user';
 
@@ -25,6 +27,10 @@ export class PlacesProfile extends ProfileBase {
           source => source.creator,
           () => UserModel
         )
-      );
+      )
+      .forMember(
+        destination => destination.creator.places,
+        ignore()
+      )
   }
 }

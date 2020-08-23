@@ -1,5 +1,5 @@
 import { 
-  Injectable, NotFoundException, UnauthorizedException, ConflictException 
+  Injectable, NotFoundException, ConflictException, Inject, forwardRef 
 } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType as RMT } from '@typegoose/typegoose';
@@ -7,15 +7,18 @@ import { ReturnModelType as RMT } from '@typegoose/typegoose';
 import { User, UserModel, CreateUserDto, UpdateUserDto } from './models';
 import { comparePasswords } from './user.helper';
 import { BaseService } from '../shared';
+import { PlacesService as PS } from '../places';
 
 
 @Injectable()
 export class UserService extends BaseService<UserModel> {
   constructor(
-    @InjectModel(UserModel) private readonly users: RMT<typeof UserModel>
+    @InjectModel(UserModel) private readonly users: RMT<typeof UserModel>,
+    @Inject(forwardRef(() => PS)) private readonly places: PS
   ) {
     super(users);
   }
+
 
   async getByEmail(email: string): Promise<UserModel> {
     const user = await this._model.findOne({ email });
@@ -34,10 +37,15 @@ export class UserService extends BaseService<UserModel> {
     }
   }
 
-  async update(id: string, update: UpdateUserDto) {
-    return await this.users.findByIdAndUpdate(id, update);
+  async update(
+    uid: string, { name, avatar }: UpdateUserDto
+  ): Promise<UserModel> {
+    const user = await this.users.findById(this.ID(uid));
+    user.name = name ?? user.name;
+    user.avatar = avatar ?? user.avatar;
+    await user.save();
+    return user.toJSON();
   }
-  // TODO Add methods to add, update or delete `places` references
 
   async authenticateUser(
     email: string, password: string
@@ -48,5 +56,19 @@ export class UserService extends BaseService<UserModel> {
     if(!same) return null;
 
     return user.toJSON();
+  }
+
+  async deleteUser(uid: string) {
+    try {
+      const user = await this.users.findOne({ _id: this.ID(uid) });
+
+      if(!user) throw new NotFoundException(
+        `User with id ${uid} does not exist`
+      );
+      await this.places.db.deleteMany({ creator: user._id });
+      await user.remove();
+    } catch(error) {
+      throw new NotFoundException(error.message);
+    }
   }
 }
