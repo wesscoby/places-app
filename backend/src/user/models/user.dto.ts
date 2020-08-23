@@ -49,5 +49,9 @@ export class CreateUserDto extends PickType(
 ) {}
 
 export class UpdateUserDto extends PartialType(
-  OmitType(CreateUserDto, ['email', 'id'] as const)
+  PickType(User, ['name', 'avatar'] as const)
+) {}
+
+export class UserProfile extends PickType(
+  User, ['id', 'name', 'email', 'avatar', 'role'] as const
 ) {}
