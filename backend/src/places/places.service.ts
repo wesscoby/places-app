@@ -75,8 +75,8 @@ export class PlacesService extends BaseService<PlacesModel> {
       );
 
       await this.users.db.findOneAndUpdate(
-        { _id: this.ID(pid) }, 
-        { $pull: { "places._id": this.ID(pid) }}
+        { _id: this.ID(uid) }, 
+        { $pull: { "places": this.ID(pid) }}
       );
       await place.remove();
     } catch(error) {
