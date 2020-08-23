@@ -1,16 +1,16 @@
 import { 
-  Controller, Get, Post, Body, Param, Patch,
-  UseInterceptors, UseGuards
+  Controller, Get, Body, Param, Patch,
+  UseInterceptors, Delete, Res, HttpStatus, BadRequestException
 } from '@nestjs/common';
 import { 
-  ApiTags, ApiOperation, ApiParam, ApiBody
+  ApiTags, ApiOperation, ApiParam, ApiBody, ApiNoContentResponse, ApiNotFoundResponse, ApiBadRequestResponse
 } from '@nestjs/swagger';
 import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { UserService } from './user.service';
 import { TransformInterceptor } from '../shared'
 import { UserModel, UpdateUserDto, User } from './models';
-import { Auth } from '../auth';
+import { Auth, Role, ReqUser } from '../auth';
 
 
 @Controller('users')
@@ -62,5 +62,27 @@ export class UserController {
   ): Promise<User> {
     const updated = await this.users.update(uid, update);
     return this.toDto(updated);
+  }
+
+  @Delete(':uid')
+  @Auth(Role.ADMIN)
+  @ApiOperation({ description: 'Delete a user from the system [ADMIN]' })
+  @ApiParam({ name: 'uid', description: 'User ID' })
+  @ApiNoContentResponse({ description: 'Successful' })
+  @ApiNotFoundResponse({ description: 'Not Found' })
+  @ApiBadRequestResponse({ description: 'Bad Request' })
+  async deleteUser(
+    @ReqUser('id') id: string,
+    @Param('uid') uid: string,
+    @Res() res
+  ) {
+    if(id !== uid) {
+      await this.users.deleteUser(uid);
+      return res.status(HttpStatus.NO_CONTENT).json({});
+    } else {
+      throw new BadRequestException(
+        'You are not allowed to delete your own account'
+      );
+    }
   }
 }
