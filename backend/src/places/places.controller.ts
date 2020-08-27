@@ -9,13 +9,13 @@ import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { PlacesService } from './places.service';
 import { Place, PlacesModel, CreatePlaceDto, UpdatePlaceDto } from './models';
-import { TransformInterceptor } from '../shared';
+// import { TransformInterceptor } from '../shared';
 import { Auth, ReqUser, IsAdmin, isOwnPlace } from '../auth';
 
 
 @Controller('places')
 @ApiTags('Places')
-@UseInterceptors(new TransformInterceptor())
+// @UseInterceptors(new TransformInterceptor())
 export class PlacesController {
   constructor(
     private readonly places: PlacesService,
@@ -77,14 +77,16 @@ export class PlacesController {
 
 
   @Patch(':pid')
-  @Auth()
-  @ApiOperation({ summary: 'Update a place by ID (only "creator" is authorized)' })
+  @ApiOperation({
+    summary: 'Update a place by ID (only "creator" is authorized)'
+  })
   @ApiParam({ name: 'pid', description: 'Place ID' })
   @ApiBody({ type: () => UpdatePlaceDto })
-  @ApiCreatedResponse({ 
+  @ApiCreatedResponse({
     description: 'The record has been successfully updated.',
     type: () => Place
   })
+  @Auth()
   async update(
     @ReqUser('id') uid: string,
     @Param('pid') pid: string,
@@ -101,13 +103,13 @@ export class PlacesController {
 
 
   @Delete(':pid')
-  @Auth()
-  @ApiOperation({ 
-    summary: 'Delete a place by ID (only an admin or "creator" is authorized)' 
+  @ApiOperation({
+    summary: 'Delete a place by ID (only an admin or "creator" is authorized)'
   })
   @ApiParam({ name: 'pid', description: 'Place ID' })
   @ApiNoContentResponse({ description: 'Successful' })
   @ApiNotFoundResponse({ description: 'Not Found' })
+  @Auth()
   async delete(
     @IsAdmin() isAdmin: boolean,
     @ReqUser('id') uid: string, 
