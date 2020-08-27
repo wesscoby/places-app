@@ -31,17 +31,13 @@ export class AuthService {
     return await this.login(newUser);
   }
 
-  async getUserProfile(uid: string): Promise<UserProfile> {
-    const { id, name, email, avatar, role } = await this.users.getById(uid);
-    return { id, name, email, avatar, role };
+  async getUserProfile(uid: string): Promise<UserModel> {
+    return await this.users.getById(uid);
   }
 
   async updateProfile(
     uid: string, update: UpdateUserDto
-  ): Promise<UserProfile> {
-    const {
-      id, name, email, avatar, role 
-    } = await this.users.update(uid, update);
-    return { id, name, email, avatar, role };
+  ): Promise<UserModel> {
+    return await this.users.update(uid, update);
   }
 }
