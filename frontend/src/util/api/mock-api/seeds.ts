@@ -1,6 +1,6 @@
 import { Server, ModelInstance } from 'miragejs';
 
-import { LatLng } from '../util';
+import { LatLng } from '../..';
 
 
 interface User {
