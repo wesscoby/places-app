@@ -1,21 +1,22 @@
 import {
   Controller, UseGuards, Post, UseInterceptors, Get, Body, Patch
 } from '@nestjs/common';
-import { ApiTags, ApiBody, ApiOperation, ApiOkResponse } from '@nestjs/swagger';
+import { ApiTags, ApiBody, ApiOperation, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
 import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards';
-import { TransformInterceptor } from '../shared';
+// import { TransformInterceptor } from '../shared';
 import {
   LoginUserDto, CreateUserDto, UserProfile, UpdateUserDto, UserModel
 } from '../user';
 import { ReqUser, Auth } from './decorators';
+import { AuthDto } from './models';
 
 
 @Controller('auth')
 @ApiTags('Auth')
-@UseInterceptors(new TransformInterceptor())
+// @UseInterceptors(new TransformInterceptor())
 export class AuthController {
   constructor(
     private readonly auth: AuthService,
@@ -29,13 +30,15 @@ export class AuthController {
   @Post('signup')
   @ApiOperation({ description: 'New User sign up' })
   @ApiBody({ type: () => CreateUserDto })
-  async signup(@Body() user: CreateUserDto) {
+  @ApiOkResponse({ type: () => AuthDto })
+  async signup(@Body() user: CreateUserDto): Promise<AuthDto> {
     return await this.auth.signup(user);
   }
 
   @Post('login')
   @ApiOperation({ description: 'User login' })
   @ApiBody({ type: () => LoginUserDto })
+  @ApiOkResponse({ type: () => AuthDto })
   @UseGuards(LocalAuthGuard)
   async login(@ReqUser() user) {
     return this.auth.login(user);
