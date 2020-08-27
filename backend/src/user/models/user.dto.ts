@@ -10,7 +10,7 @@ import { Role } from '../../auth';
 
 export class User {
   @AutoMap()
-  @ApiProperty() 
+  @ApiProperty()
   readonly id!: string;
 
   @AutoMap()
@@ -45,13 +45,34 @@ export class LoginUserDto extends PickType(User, ['email'] as const) {
 }
 
 export class CreateUserDto extends PickType(
-  User, ['id', 'name', 'email', 'avatar'] as const
-) {}
+  User, ['name', 'email', 'avatar'] as const
+) {
+  @ApiProperty()
+  readonly password: string;
+}
 
 export class UpdateUserDto extends PartialType(
   PickType(User, ['name', 'avatar'] as const)
 ) {}
 
-export class UserProfile extends PickType(
-  User, ['id', 'name', 'email', 'avatar', 'role'] as const
-) {}
+export class UserProfile {
+  @AutoMap()
+  @ApiProperty()
+  readonly id!: string;
+
+  @AutoMap()
+  @ApiProperty()
+  readonly name!: string;
+
+  @AutoMap()
+  @ApiProperty()
+  readonly email!: string;
+
+  @AutoMap()
+  @ApiPropertyOptional()
+  readonly avatar?: string;
+
+  @AutoMap()
+  @ApiProperty({ enum: Role, default: Role.USER })
+  readonly role!: Role;
+}
