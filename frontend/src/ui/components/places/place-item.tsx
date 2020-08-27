@@ -13,7 +13,7 @@ interface Props {
 const PlaceItem: FC<Props> = ({ 
   place: { 
     id, title, image,
-    address, description, location 
+    address, description, coordinates
   } 
 }) => {
   const { isLoggedIn } = useContext(AuthContext);
@@ -46,7 +46,7 @@ const PlaceItem: FC<Props> = ({
         )}
       >
         <div className="map-container">
-          <Map center={location} zoom={10} />
+          <Map center={coordinates} zoom={10} />
         </div>
       </Modal>
 

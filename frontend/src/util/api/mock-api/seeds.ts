@@ -13,7 +13,7 @@ interface Place {
   title: string;
   description: string;
   address: string;
-  location: LatLng,
+  coordinates: LatLng,
   image: string;
   user: any;
 }
@@ -48,7 +48,7 @@ export default function seeds(server: Server) {
     title: "New Life Children's Home",
     description: 'A registered non-governmental and non-profit making organization founded from a call burning desire to aid the development of the homeless orphans in Ghana',
     address: 'Near Junction Mall, Nungua',
-    location: {
+    coordinates: {
       lat: 5.611074,
       lng: -0.069404
     },
@@ -59,7 +59,7 @@ export default function seeds(server: Server) {
     title: 'Skyplex Pictures',
     description: 'Skyplex pictures deals in all Your Wedding Events, Model Shoot, Parties, Conference, Graduation etc.',
     address: 'Near Wassaman, Community Two',
-    location: {
+    coordinates: {
       lat: 5.630065,
       lng: -0.016705
     },
@@ -71,7 +71,7 @@ export default function seeds(server: Server) {
     title: 'iSpace Foundation',
     description: 'iSpace Foundation is an Innovation and Technology hub in Accra, Ghana founded in February 2013. iSpace is known to offer a conducive environment for growth in the Startup Ecosystem by providing a working space, Training and Mentoring, access to Funding and other facilities for Entrepreneurs and Start-ups to launch and manage their business ideas. ',
     address: 'No 14 Otu Adzin Rd, Spintex',
-    location: {
+    coordinates: {
       lat: 5.639522,
       lng: -0.093145
     },

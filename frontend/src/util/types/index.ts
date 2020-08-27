@@ -11,17 +11,17 @@ export interface Place {
   title: string;
   description: string;
   address: string;
-  location: LatLng;
+  coordinates: LatLng;
   image: string;
-  user: string | User;
+  creator: User;
 }
 
 export interface User {
   id: string;
-  name?: string;
+  name: string;
   email: string;
-  image: string;
-  places: Place[] | string[];
+  avatar: string;
+  places: Place[];
 }
 
 export type OnClickEvent = (event: MouseEvent<HTMLElement>) => void;
