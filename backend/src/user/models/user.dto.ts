@@ -45,8 +45,11 @@ export class LoginUserDto extends PickType(User, ['email'] as const) {
 }
 
 export class CreateUserDto extends PickType(
-  User, ['id', 'name', 'email', 'avatar'] as const
-) {}
+  User, ['name', 'email', 'avatar'] as const
+) {
+  @ApiProperty()
+  readonly password: string;
+}
 
 export class UpdateUserDto extends PartialType(
   PickType(User, ['name', 'avatar'] as const)
