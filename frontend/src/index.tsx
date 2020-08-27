@@ -5,7 +5,8 @@ import './scss/index.scss';
 import App from './App';
 import { AuthContextProvider } from './context';
 import * as serviceWorker from './serviceWorker';
-import mockAPI from './mock-api';
+import mockAPI from './util/api/mock-api';
+
 
 // Start Mock API in development
 if(process.env.NODE_ENV === 'development') {
