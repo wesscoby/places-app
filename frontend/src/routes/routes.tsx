@@ -2,11 +2,11 @@ import React, { FC, useContext } from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 
 import { AuthContext } from '../context';
-import { 
-  Users, UserPlaces, NewPlace, UpdatePlace, Auth
-} from '../pages';
-import Authenticated from './authenticated';
 import Public from './public';
+import Authenticated from './authenticated';
+import {
+  Users, UserPlaces, NewPlace, UpdatePlace, Auth
+} from '../ui/pages';
 
 
 const Routes: FC = () => {

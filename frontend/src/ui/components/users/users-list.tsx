@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { UserItem } from '.';
 import { Card } from '..'
-import { User } from '../../util';
+import { User } from '../../../util';
 
 interface Props {
   items: User[];

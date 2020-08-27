@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import { Formik, Form } from 'formik';
 
 import { Input, Button } from '../../components';
-import { newPlaceSchema } from '../../util';
-import { useAddPlace } from '../../hooks';
+import { newPlaceSchema } from '../../../util';
+import { useAddPlace } from '../../../hooks';
 
 
 interface NewPlaceSchema {

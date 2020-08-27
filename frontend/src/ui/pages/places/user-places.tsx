@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { PlaceList } from '../../components';
-import { useGetPlacesByUser } from '../../hooks';
+import { useGetPlacesByUser } from '../../../hooks';
 
 
 interface ParamTypes {

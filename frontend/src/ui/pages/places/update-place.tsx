@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 
 import { Input, Button, Card } from '../../components';
-import { updatePlaceSchema } from '../../util';
-import { useFetchPlaceById, useUpdatePlace } from '../../hooks';
+import { updatePlaceSchema } from '../../../util';
+import { useFetchPlaceById, useUpdatePlace } from '../../../hooks';
 
 
 interface ParamTypes {

@@ -1,23 +1,19 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { Formik, Form } from 'formik';
-// import { useHistory } from 'react-router-dom';
 
-import { loginSchema } from '../../util';
+import { signupSchema } from '../../../util';
 import { Input, Button } from '..';
-import { AuthContext } from '../../context';
 
 
-// TODO Change Login simulation
-interface LoginSchema {
+interface SignupSchema {
+  name: string;
   email: string;
   password: string;
 }
 
 const LoginForm: FC = () => {
-  // const history = useHistory();
-  const { login } = useContext(AuthContext);
-
-  const schemaValues: LoginSchema = {
+  const schemaValues: SignupSchema = {
+    name: '',
     email: '',
     password: ''
   }
@@ -25,20 +21,25 @@ const LoginForm: FC = () => {
   return (
     <Formik
       initialValues={schemaValues}
-      validationSchema={loginSchema}
+      validationSchema={signupSchema}
       onSubmit={(
-        { email, password }: LoginSchema,
+        { name, email, password }: SignupSchema,
         { setSubmitting }
       ) => {
         setSubmitting(true);
-        console.log({ email, password });
-        login();
+        console.log({ name, email, password });
         setSubmitting(false);
     }}
   >
     {({ isSubmitting, errors, isValid }) => (
       <>
         <Form>
+          <Input
+            label="Name"
+            name="name"
+            placeholder="Enter your full name"
+            errorText={errors.name}
+          />
           <Input
             label="Email"
             name="email"
@@ -53,7 +54,7 @@ const LoginForm: FC = () => {
             errorText={errors.password}
           />
           <Button type="submit" disabled={isSubmitting || !isValid}>
-            LOGIN
+            SIGNUP
           </Button>
         </Form>
       </>

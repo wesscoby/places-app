@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-import { OnClickEvent } from '../../../util';
+import { OnClickEvent } from '../../../../util';
 
 
 interface Props {

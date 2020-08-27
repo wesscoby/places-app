@@ -1,9 +1,9 @@
 import React, { FC, useState, useContext } from 'react';
 
 import { Card, Button, Modal, Map } from '../';
-import { Place } from '../../util';
-import { useDeletePlace } from '../../hooks';
-import { AuthContext } from '../../context';
+import { Place } from '../../../util';
+import { useDeletePlace } from '../../../hooks';
+import { AuthContext } from '../../../context';
 
 
 interface Props {

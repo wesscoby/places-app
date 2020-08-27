@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-import { User } from '../../util';
+import { User } from '../../../util';
 import { Avatar, Card } from '..'; 
 
 

@@ -1,6 +1,6 @@
 import React, { FC, useRef, useEffect } from 'react';
 
-import { LatLng } from '../../../util';
+import { LatLng } from '../../../../util';
 
 
 declare global {

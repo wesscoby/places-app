@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { UsersList } from '../../components';
-import { useGetAllUsers } from '../../hooks';
+import { useGetAllUsers } from '../../../hooks';
 
 
 const Users: FC = () => {

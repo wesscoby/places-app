@@ -6,7 +6,7 @@ import {
   ReactQueryConfigProvider, ReactQueryProviderConfig 
 } from 'react-query';
 
-import { MainNavigation } from './components';
+import { MainNavigation } from './ui/components';
 import { Routes } from './routes';
 
 

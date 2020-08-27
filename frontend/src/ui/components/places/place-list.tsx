@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { PlaceItem, Card, Button  } from '..';
-import { Place } from '../../util';
+import { Place } from '../../../util';
 
 
 interface Props {

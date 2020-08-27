@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { AuthContext } from '../../../context';
+import { AuthContext } from '../../../../context';
 
 
 const NavLinks: FC = () => {
