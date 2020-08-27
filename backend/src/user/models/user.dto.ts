@@ -29,7 +29,7 @@ export class User {
   readonly role!: Role;
 
   @AutoMap(() => Place)
-  @ApiProperty({ type:  [Place]})
+  @ApiProperty({ type: () => [Place]})
   readonly places!: Place[];
 
   @ApiProperty({ type: String, format: 'date-time' })

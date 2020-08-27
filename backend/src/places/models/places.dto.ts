@@ -49,7 +49,7 @@ export class Place {
   updatedAt!: Date;
 
   @AutoMap(() => User)
-  @ApiProperty({ type: User })
+  @ApiProperty({ type: () => User })
   readonly creator!: User;
 }
 
