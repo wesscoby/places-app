@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import { 
   BrowserRouter as Router } from 'react-router-dom';
 import { ReactQueryDevtools as RQD } from 'react-query-devtools';
-import { 
-  ReactQueryConfigProvider, ReactQueryProviderConfig 
+import {
+  ReactQueryConfigProvider, ReactQueryProviderConfig
 } from 'react-query';
 
 import { MainNavigation } from './ui/components';
@@ -11,7 +11,9 @@ import { Routes } from './routes';
 
 
 const queryConfig: ReactQueryProviderConfig = {
-  queries: { refetchOnWindowFocus: false }
+  queries: {
+    refetchOnWindowFocus: false
+  }
 }
 
 const App: FC = () => {
