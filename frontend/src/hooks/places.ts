@@ -1,36 +1,36 @@
 import { useQuery, useMutation } from 'react-query';
 
-import { api } from '../util';
+import { AddPlaceData, UpdatePlaceData } from '../util';
+import { ApiService } from '../services';
 
 
 export function useFetchPlaceById(pid: string) {
-  return useQuery(["places", {pid}], async () => {
-    const { data } = await api.get(`places/${pid}`);
-    return data;
-  });
+  return useQuery(
+    ["places", {pid}],
+    async () => await ApiService.getPlaceById(pid)
+  );
 }
 
 export function useGetPlacesByUser(uid: string) {
-  return useQuery(['places/user', {uid}], async() => {
-    const { data } = await api.get(`places/user/${uid}`);
-    return data;
-  });
+  return useQuery(
+    ['places/user', {uid}], async() => await ApiService.getPlacesByUser(uid)
+  );
 }
 
 export function useAddPlace() {
-  return useMutation(async (formData: any) => {
-    await api.post('places', formData);
-  });
+  return useMutation(
+    async (formData: AddPlaceData) => await ApiService.addPlace(formData)
+  );
 }
 
 export function useUpdatePlace(pid: string) {
-  return useMutation(async (formData: any) => {
-    await api.patch(`places/${pid}`, formData);
-  });
+  return useMutation(
+    async (data: UpdatePlaceData) => await ApiService.updatePlace(pid, data)
+  );
 }
 
 export function useDeletePlace(pid: string) {
-  return useMutation(async () => {
-    await api.delete(`places/${pid}`);
-  });
+  return useMutation(
+    async () => await ApiService.deletePlace(pid)
+  );
 }
