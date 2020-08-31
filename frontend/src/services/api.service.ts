@@ -84,9 +84,14 @@ class ApiService {
     return authData.user;
   }
 
-  getUserProfile = async(): Promise<UserProfile> => await this.auth.get(
-    'auth/profile'
-  );
+  getUserProfile = async(): Promise<UserProfile | null> => {
+    try {
+      const user: UserProfile = await this.auth.get('auth/profile');
+      return user;
+    } catch(error) {
+      return null;
+    }
+  }
 
   addPlace = async(
     data: AddPlaceData
