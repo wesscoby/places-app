@@ -1,12 +1,9 @@
-import React, { FC, useRef, useEffect } from 'react';
+import React, { FC } from 'react';
+import { GoogleMap } from '@react-google-maps/api';
+import { Marker } from '@react-google-maps/api';
 
-import { LatLng } from '../../../../util';
+import { LatLng, mapConfig } from '../../../../util';
 
-
-declare global {
-  interface Window { ol: any; }
-}
-window.ol = window.ol || {};
 
 interface Props {
   className?: string;
@@ -15,47 +12,18 @@ interface Props {
   zoom: number;
 }
 
-const Map: FC<Props> = ({ 
-  className = "", style = {}, center, zoom
-}) => {
-
-  const mapRef = useRef<any>();
-
-  useEffect(() => {
-    new window.ol.Map({
-      target: mapRef.current.id,
-      controls: window.ol.control.defaults({ attribution: false }),
-      layers: [
-        new window.ol.layer.Tile({
-          source: new window.ol.source.OSM()
-        }),
-
-        new window.ol.layer.Vector({
-          source: new window.ol.source.Vector({
-            features: [
-              new window.ol.Feature({
-                geometry: new window.ol.geom.Point(window.ol.proj.fromLonLat([center.lng, center.lat]))
-              })
-            ]
-          })
-        })
-      ],
-      view: new window.ol.View({
-        center: window.ol.proj.fromLonLat([center.lng, center.lat]),
-        zoom: zoom,
-        maxZoom: 18
-      }),
-    });
-  }, [center, zoom]);
+const Map: FC<Props> = ({ center, zoom }) => {
+  const { containerStyle, options } = mapConfig;
 
   return (
-    <div
-      ref={mapRef}
-      className={`map ${className}`}
-      style={style}
-      id="map"
-    />
-  );
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      zoom={zoom} center={center}
+      options={options}
+    >
+      <Marker position={center} />
+    </GoogleMap>
+  )
 }
 
 export default Map;
