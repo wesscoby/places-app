@@ -13,12 +13,14 @@ interface Props {
 const UserItem: FC<Props> = (
   { user: { id, avatar, name }, placeCount }
 ) => {
+  const defaultAvatar = 'https://res.cloudinary.com/places-app/image/upload/v1598655353/profiles/avatar_d8kxkc.png';
+
   return (
     <li className="user-item">
       <Card className="user-item__content">
         <Link to={`/${id}/places`}>
           <div className="user-item__image">
-            <Avatar image={avatar} alt={name} />
+            <Avatar image={avatar ?? defaultAvatar} alt={name} />
           </div>
           <div className="user-item__info">
             <h2>{name}</h2>
