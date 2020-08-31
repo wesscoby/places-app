@@ -14,11 +14,7 @@ const Avatar: FC<Props> = ({
 }) => {
   return (
     <div className={`avatar ${className}`}>
-      <img
-        src={image}
-        alt={alt}
-        // style={{ width: width, height: width }}
-      />
+      <img src={image} alt={alt} />
     </div>
   );
 };
