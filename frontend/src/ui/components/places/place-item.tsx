@@ -13,13 +13,13 @@ interface Props {
 const PlaceItem: FC<Props> = ({ 
   place: { 
     id, title, image,
-    address, description, coordinates
+    address, description, coordinates, creator
   } 
 }) => {
-  const { isLoggedIn } = useContext(AuthContext);
-  const [mutate] = useDeletePlace(id);
+  const { isAuthenticated, isAdmin, user } = useContext(AuthContext);
+  const [deletePlace] = useDeletePlace(id);
   const [showMap, setShowMap] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const openMapHandler = () => setShowMap(true);
   const closeMapHandler = () => setShowMap(false);
@@ -27,16 +27,20 @@ const PlaceItem: FC<Props> = ({
   const showDeleteWarningHandler = () => setShowConfirmModal(true);
   const cancelDeleteHandler = () => setShowConfirmModal(false);
 
-  const confirmDeleteHandler = () => {
-    mutate();
+  const confirmDeleteHandler = async() => {
+    await deletePlace();
     cancelDeleteHandler();
   };
 
+  const isCreator = () => isAuthenticated() && (user?.id === creator.id);
+  const canUpdatePlace = () => isCreator();
+  const canDeletePlace = () => isCreator() || isAdmin();
+
   return (
     <>
-      <Modal 
-        show={showMap} 
-        onCancel={closeMapHandler} 
+      <Modal
+        show={showMap}
+        onCancel={closeMapHandler}
         header={address}
         headerClass=""
         contentClass="place-item__modal-content"
@@ -81,13 +85,11 @@ const PlaceItem: FC<Props> = ({
           </div>
           <div className="place-item__actions">
             <Button inverse onClick={openMapHandler}>VIEW ON MAP</Button>
-            { isLoggedIn && (
-              <>
-                <Button to={`/places/${id}`}>EDIT</Button>
-                <Button danger onClick={showDeleteWarningHandler}>
-                  DELETE
-                </Button>
-              </>
+            {canUpdatePlace() && <Button to={`/places/${id}`}>EDIT</Button>}
+            {canDeletePlace() && (
+              <Button danger onClick={showDeleteWarningHandler}>
+                DELETE
+              </Button>
             )}
           </div>
         </Card>
