@@ -26,18 +26,18 @@ const Input: FC<Props> = ({
 }) => {
   const element = textarea ? (
     <Field 
-      id={name} 
-      name={name} 
-      placeholder={placeholder} 
+      id={name}
+      name={name}
+      placeholder={placeholder}
       component="textarea"
       rows={rows}
     />
   ) : (
-    <Field 
-      id={name} 
+    <Field
+      id={name}
       name={name}
-      type={type} 
-      placeholder={placeholder}  
+      type={type}
+      placeholder={placeholder}
     />
   );
 
