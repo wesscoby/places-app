@@ -4,7 +4,7 @@ import { Switch, Redirect } from 'react-router-dom';
 import Public from './public';
 import Authenticated from './authenticated';
 import {
-  Users, UserPlaces, NewPlace, UpdatePlace, Auth, MyPlaces
+  Users, UserPlaces, NewPlace, UpdatePlace, Auth, MyPlaces, FourOhFour
 } from '../ui/pages';
 import { useGetUserProfile } from '../hooks';
 import { AuthContext } from '../context';
@@ -39,7 +39,7 @@ const Routes: FC = () => {
         path="/auth" exact
         component={Auth}
       />
-      <Redirect to="/" />
+      <Public component={FourOhFour} />
     </Switch>
   );
 }
