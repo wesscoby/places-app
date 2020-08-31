@@ -4,14 +4,14 @@ import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { AuthContext } from '../context';
 
 
-const Authenticated: FC<RouteProps> = ({
+const Authorized: FC<RouteProps> = ({
   component, ...rest
 }) => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAdmin } = useContext(AuthContext);
 
-  return isAuthenticated() ?
+  return isAdmin() ?
     <Route {...rest} component={component} /> :
-    <Redirect to="/auth" />;
+    <Redirect to="/" />; // TODO Redirect to 403 unauthorized page
 }
 
-export default Authenticated;
+export default Authorized;
