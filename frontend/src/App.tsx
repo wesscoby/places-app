@@ -15,7 +15,8 @@ import { LoadScript } from '@react-google-maps/api';
 
 const queryConfig: ReactQueryProviderConfig = {
   queries: {
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
+    retry: false
   }
 }
 
