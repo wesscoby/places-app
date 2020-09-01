@@ -1,16 +1,16 @@
 import React, { FC } from 'react';
 
-import { UsersList } from '../../components';
+import { UsersList, Spinner, Error } from '../../components';
 import { useGetAllUsers } from '../../../hooks';
 
 
 const Users: FC = () => {
-  const { error, isLoading, data } = useGetAllUsers();
+  const { error, isLoading, isError, data } = useGetAllUsers();
 
-  if(isLoading) return <p>Loading...</p>;
-  if(error) return <p>An error occurred: {error?.message}</p>;
+  if(isLoading) return <Spinner asOverlay />;
+  if(isError) return <Error error={error!} />
 
-  return <UsersList items={data.users} />
+  return <UsersList items={data ?? []} />
 }
 
 export default Users;
