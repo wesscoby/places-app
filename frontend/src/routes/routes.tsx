@@ -1,39 +1,45 @@
-import React, { FC, useContext } from 'react';
-import { Switch, Redirect } from 'react-router-dom';
+import React, { FC, useContext, useEffect } from 'react';
+import { Switch } from 'react-router-dom';
 
-import { AuthContext } from '../context';
-import { 
-  Users, UserPlaces, NewPlace, UpdatePlace, Auth
-} from '../pages';
-import Authenticated from './authenticated';
 import Public from './public';
+import Authenticated from './authenticated';
+import {
+  Users, UserPlaces, NewPlace, UpdatePlace, Auth, MyPlaces, FourOhFour
+} from '../ui/pages';
+import { useGetUserProfile } from '../hooks';
+import { AuthContext } from '../context';
 
 
 const Routes: FC = () => {
-  const { isLoggedIn } = useContext(AuthContext);
+  //? Hack to persist user login
+  const { setUser } = useContext(AuthContext);
+  const { data } = useGetUserProfile();
+
+  useEffect(() => {
+    setUser(data ?? null);
+  }, [data, setUser])
 
   return (
     <Switch>
       <Public path="/" exact component={Users} />
-      <Public 
-        path="/:uid/places" exact 
-        component={UserPlaces} 
+      <Public
+        path="/:uid/places" exact
+        component={UserPlaces}
       />
-      <Authenticated 
-        auth={isLoggedIn} 
+      <Authenticated path="/my-places" component={MyPlaces} />
+      <Authenticated
         path="/places/new" exact 
-        component={NewPlace} 
+        component={NewPlace}
       />
-      <Authenticated 
-        auth={isLoggedIn} 
+      <Authenticated
         path="/places/:pid" 
-        component={UpdatePlace} 
+        component={UpdatePlace}
       />
-      <Public 
-        path="/auth" exact 
-        render={() => isLoggedIn ? <Redirect to="/" /> : <Auth />} 
-      /> 
-      <Redirect to="/" />
+      <Public
+        path="/auth" exact
+        component={Auth}
+      />
+      <Public component={FourOhFour} />
     </Switch>
   );
 }

@@ -8,13 +8,13 @@ import {
 import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { UserService } from './user.service';
-import { TransformInterceptor } from '../shared'
+// import { TransformInterceptor } from '../shared'
 import { UserModel, UpdateUserDto, User } from './models';
 import { Auth, Role, ReqUser } from '../auth';
 
 
 @Controller('users')
-@UseInterceptors(new TransformInterceptor())
+// @UseInterceptors(new TransformInterceptor())
 @ApiTags('Users')
 export class UserController {
   constructor(
@@ -38,9 +38,7 @@ export class UserController {
   }
 
   @Get(':uid')
-  @ApiOperation({ 
-    summary: 'Get a specific user by ID' 
-  })
+  @ApiOperation({ summary: 'Get a specific user by ID' })
   @ApiParam({ name: 'uid', description: 'User ID' })
   async getOne(
     @Param('uid') uid: string
@@ -50,12 +48,12 @@ export class UserController {
   }
 
   @Patch(':uid')
-  @Auth()
-  @ApiOperation({ 
-    summary: 'Update a specific user by ID' 
+  @ApiOperation({
+    summary: 'Update a specific user by ID'
   })
   @ApiParam({ name: 'uid', description: 'User ID' })
   @ApiBody({ type: UpdateUserDto, description: 'Data to update' })
+  @Auth()
   async update(
     @Param('uid') uid: string,
     @Body() update: UpdateUserDto
@@ -65,12 +63,12 @@ export class UserController {
   }
 
   @Delete(':uid')
-  @Auth(Role.ADMIN)
   @ApiOperation({ description: 'Delete a user from the system [ADMIN]' })
   @ApiParam({ name: 'uid', description: 'User ID' })
   @ApiNoContentResponse({ description: 'Successful' })
   @ApiNotFoundResponse({ description: 'Not Found' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
+  @Auth(Role.ADMIN)
   async deleteUser(
     @ReqUser('id') id: string,
     @Param('uid') uid: string,

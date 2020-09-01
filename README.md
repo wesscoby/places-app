@@ -15,6 +15,8 @@ Currently learning and following the concepts in the course and coding along, bu
 - [**Miragejs**][miragejs] - *API mocking* library that lets you build, test and share a complete working JavaScript application without having to rely on any backend services
 - [**React Query**][rq] - Performant and powerful data synchronization for React. Fetch, cache and update data in your React and React Native applications all without touching any "*global state*"
 - **Axios**
+- **Cloudinary API**
+- **Google Maps API**
 
 ### Backend
 - [**Nest.js**][nest]
