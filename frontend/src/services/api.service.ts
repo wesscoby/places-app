@@ -5,6 +5,7 @@ import {
   AuthData, AddPlaceData, UpdatePlaceData
 } from '../util';
 import { CookieService } from '.';
+import { ok } from 'assert';
 
 
 class ApiService {
@@ -101,7 +102,14 @@ class ApiService {
     pid: string, data: UpdatePlaceData
   ): Promise<Place> => await this.auth.patch(`places/${pid}`, data);
 
-  deletePlace = async(pid: string) => await this.auth.delete(`places/${pid}`);
+  deletePlace = async(pid: string): Promise<string | null> => {
+    try {
+      await this.auth.delete(`places/${pid}`);
+      return 'ok';
+    } catch(error) {
+      return null;
+    }
+  };
 }
 
 export default new ApiService();

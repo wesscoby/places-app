@@ -1,7 +1,8 @@
 import React, { FC, useState, useContext } from 'react';
+import { Redirect } from 'react-router-dom';
 
 import { Card, Button, Modal, Map } from '../';
-import { Place } from '../../../util';
+import { Place, notify } from '../../../util';
 import { useDeletePlace } from '../../../hooks';
 import { AuthContext } from '../../../context';
 
@@ -20,6 +21,7 @@ const PlaceItem: FC<Props> = ({
   const [deletePlace] = useDeletePlace(id);
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isPlaceDeleted, setPlaceDeleted] = useState(false);
 
   const openMapHandler = () => setShowMap(true);
   const closeMapHandler = () => setShowMap(false);
@@ -28,8 +30,21 @@ const PlaceItem: FC<Props> = ({
   const cancelDeleteHandler = () => setShowConfirmModal(false);
 
   const confirmDeleteHandler = async() => {
-    await deletePlace();
-    cancelDeleteHandler();
+    try {
+      const ok = await deletePlace();
+      if(ok) {
+        cancelDeleteHandler();
+        notify('Place deleted successfully', 'success', 500);
+        setTimeout(() => {
+          setPlaceDeleted(true);
+        }, 800);
+      } else {
+        throw new Error('Deleting failed!');
+      }
+    } catch(error) {
+      notify(error.message, 'error', 1000);
+      cancelDeleteHandler();
+    }
   };
 
   const isCreator = () => isAuthenticated() && (user?.id === creator.id);
@@ -38,6 +53,7 @@ const PlaceItem: FC<Props> = ({
 
   return (
     <>
+      {isPlaceDeleted && <Redirect to="/my-places" />}
       <Modal
         show={showMap}
         onCancel={closeMapHandler}
