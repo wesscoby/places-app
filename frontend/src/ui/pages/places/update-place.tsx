@@ -1,9 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Formik, Form } from 'formik';
+import { SyncLoader } from 'react-spinners';
+import { Redirect } from 'react-router-dom';
 
-import { Input, Button, Card } from '../../components';
-import { updatePlaceSchema } from '../../../util';
+import { Input, Button, Card, Spinner } from '../../components';
+import { updatePlaceSchema, notify } from '../../../util';
 import { useFetchPlaceById, useUpdatePlace } from '../../../hooks';
 
 
@@ -19,9 +21,10 @@ interface UpdatePlaceSchema {
 const UpdatePlace: FC = () => {
   const { pid } = useParams<ParamTypes>();
   const { error, isLoading, data } = useFetchPlaceById(pid);
-  const [mutate] = useUpdatePlace(pid);
+  const [isPlaceUpdated, setPlaceUpdated] = useState(false);
+  const [updatePlace] = useUpdatePlace(pid);
 
-  if(isLoading) return <p>Loading...</p>;
+  if(isLoading) return <Spinner asOverlay />;
   if(error) return <p>Error! {error?.message}</p>;
   
   if(!data) return (
@@ -33,48 +36,69 @@ const UpdatePlace: FC = () => {
   );
 
   const schemaValues: UpdatePlaceSchema = {
-    title: data.place.title,
-    description: data.place.description
+    title: data.title,
+    description: data.description
   }
 
   return (
-    <div className="place-form">
-      <Formik
-        initialValues={schemaValues}
-        validationSchema={updatePlaceSchema}
-        onSubmit={(
-          { title, description }: UpdatePlaceSchema,
-          { setSubmitting }
-        ) => {
-          setSubmitting(true);
-          mutate({ title, description });
-          setSubmitting(false);
-        }}
-      >
-        {({ 
-          isSubmitting, errors, values: { title }, isValid
-        }) => (
-          <Form>
-            <Input
-              label="Title"
-              name="title"
-              placeholder="Enter title"
-              errorText={errors.title}
-            />
-            <Input
-              textarea
-              label="Description"
-              name="description"
-              placeholder={`Provide some information about ${title ? title : 'this place'}`}
-              errorText={errors.description}
-            />
-            <Button type="submit" disabled={isSubmitting || !isValid}>
-              {isSubmitting ? 'SUBMITTING...' : 'UPDATE PLACE'}
-            </Button>
-          </Form>
-        )}
-      </Formik>
-    </div>
+    <>
+      {isPlaceUpdated && <Redirect to="/my-places" />}
+      <div className="place-form">
+        <Formik
+          initialValues={schemaValues}
+          validationSchema={updatePlaceSchema}
+          onSubmit={(
+            { title, description }: UpdatePlaceSchema,
+            { setSubmitting }
+          ) => {
+            try {
+              if(
+                title === data.title && description === data.description
+              ) throw new Error('Nothing changed!');
+              setSubmitting(true);
+              const updatedPlace = updatePlace({ title, description });
+              if(updatedPlace) {
+                notify('Updated successful', 'success', 500);
+                setSubmitting(false);
+                setTimeout(() => {
+                  setPlaceUpdated(true);
+                }, 800);
+              } else {
+                throw new Error('Updating failed. try again!');
+              }
+            } catch(error) {
+              notify(error.message, 'error', 1000);
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({
+            isSubmitting, errors, values: { title }, isValid
+          }) => (
+            <Form>
+              <Input
+                label="Title"
+                name="title"
+                placeholder="Enter title"
+                errorText={errors.title}
+              />
+              <Input
+                textarea
+                label="Description"
+                name="description"
+                placeholder={`Provide some information about ${title ? title : 'this place'}`}
+                errorText={errors.description}
+              />
+              {isSubmitting ? <SyncLoader size={12} /> : (
+                <Button type="submit" disabled={!isValid}>
+                  UPDATE PLACE
+                </Button>
+              )}
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </>
   );
 }
 
