@@ -24,7 +24,7 @@ async function bootstrap() {
   app.use(helmet());
   
   const config = app.get(ConfigService);
-  const { host, port } = config.get<AppConfig>('app');
+  const { port } = config.get<AppConfig>('app');
 
   const description = '**API Server** for Places App - an app where users can share places *(with image and coordinates)* with other users';
 
@@ -37,7 +37,6 @@ async function bootstrap() {
                         'cobygiven@gmail.com'
                       )
                       .setVersion('1.0')
-                      .addServer(host)
                       .addTag('Auth')
                       .addTag('Users')
                       .addTag('Places')
