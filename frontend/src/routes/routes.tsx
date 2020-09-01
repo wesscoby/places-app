@@ -1,5 +1,5 @@
 import React, { FC, useContext, useEffect } from 'react';
-import { Switch, Redirect } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 
 import Public from './public';
 import Authenticated from './authenticated';
