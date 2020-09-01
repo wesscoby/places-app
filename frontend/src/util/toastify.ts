@@ -3,9 +3,12 @@ import { toast, TypeOptions } from 'react-toastify';
 
 const { TOP_CENTER } = toast.POSITION;
 
-export const notify = (message: string, type: TypeOptions) => {
+export const notify = (
+  message: string, type: TypeOptions, timeout?: number | false
+) => {
   toast(message, {
     position: TOP_CENTER,
-    type
+    type,
+    autoClose: timeout ?? 1500
   });
 }
