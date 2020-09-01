@@ -1,30 +1,39 @@
-import React, { FC, createContext, useState, useCallback } from 'react';
+import React, { FC, createContext, useState } from 'react';
+
+import { UserProfile, Role } from '../util';
+import { CookieService } from '../services';
 
 
-// TODO fix dummy auth context after backend is created
-const contextData = {
-  isLoggedIn: false,
-  login: () => {},
-  logout: () => {}
+interface Context {
+  user: UserProfile | null;
+  setUser: React.Dispatch<React.SetStateAction<UserProfile | null>>;
+  isAuthenticated: () => boolean;
+  isAdmin: () => boolean;
+  logout: () => void;
 }
 
-export const AuthContext = createContext(contextData)
+export const AuthContext = createContext<Context>({
+  user: null,
+  setUser(){},
+  isAuthenticated: () => false,
+  isAdmin: () => false,
+  logout: () => {}
+})
 
 export const AuthContextProvider: FC = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const isAuthenticated = () => user ? true : false;
+  const isAdmin = () => (user && user.role === Role.ADMIN) ? true : false;
 
-  const login = useCallback(() => {
-    setIsLoggedIn(true)
-  }, []);
-
-  const logout = useCallback(() => {
-    setIsLoggedIn(false)
-  }, []) ;
+  const logout = () => {
+    CookieService.removeAccessToken();
+    setUser(null);
+  }
 
   const { Provider } = AuthContext;
 
   return (
-  <Provider value={{ isLoggedIn, login, logout }}>
+  <Provider value={{ user, isAdmin, isAuthenticated, setUser, logout }}>
     {children}
   </Provider>
   );

@@ -8,3 +8,14 @@
   border-radius: 6px;
   background: white;
 }
+
+.search-box {
+  input {
+    font-size: 0.8rem;
+    width: 100%;
+  }
+}
+
+.search-popover {
+  z-index: 6;
+}

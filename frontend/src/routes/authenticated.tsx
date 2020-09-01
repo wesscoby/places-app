@@ -1,16 +1,16 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
 
+import { AuthContext } from '../context';
 
-interface AuthenticatedRouteProps extends RouteProps {
-  auth: boolean; // TODO update with actual auth object
-}
 
-const Authenticated: FC<AuthenticatedRouteProps> = ({ 
-  component, auth, ...rest
-}) => { 
-  return auth ?
-    <Route {...rest} component={component} /> : 
+const Authenticated: FC<RouteProps> = ({
+  component, ...rest
+}) => {
+  const { isAuthenticated } = useContext(AuthContext);
+
+  return isAuthenticated() ?
+    <Route {...rest} component={component} /> :
     <Redirect to="/auth" />;
 }
 
