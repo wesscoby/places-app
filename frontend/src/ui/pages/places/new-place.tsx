@@ -1,78 +1,117 @@
-import React, { FC } from 'react';
+import React, { FC, ChangeEvent, useState } from 'react';
 import { Formik, Form } from 'formik';
+import Geocode from "react-geocode";
+import { SyncLoader } from 'react-spinners';
+import { Redirect } from 'react-router-dom';
+import "@reach/combobox/styles.css";
 
-import { Input, Button } from '../../components';
-import { newPlaceSchema } from '../../../util';
-import { useAddPlace } from '../../../hooks';
+import { Input, Button, SearchBox } from '../../components';
+import { newPlaceSchema, notify } from '../../../util';
+import { useAddPlace, useImageUpload } from '../../../hooks';
 
 
 interface NewPlaceSchema {
   title: string;
   description: string;
-  address: string;
 }
 
 const NewPlace: FC = () => {
-  const [mutate] = useAddPlace();
+  const [addPlace] = useAddPlace();
+  const [uploadImage] = useImageUpload();
+  const [file, setFile] = useState<File | null>(null);
+  const [address, setAddress] = useState<string>('');
+  const [isPlaceCreated, setIsPlaceCreated] = useState(false)
+  Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY!);
+
   const schemaValues: NewPlaceSchema = {
     title: '',
     description: '',
-    address: ''
   };
-  
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.currentTarget.files![0];
+    setFile(file);
+  }
+
   return (
-    <div className="place-form">
-      <Formik
-        initialValues={schemaValues}
-        validationSchema={newPlaceSchema}
-        onSubmit={(
-          { title, description, address }: NewPlaceSchema, 
-          { setSubmitting }
-        ) => {
-          setSubmitting(true);
-            // TODO Change hard-coded data [later]
-          mutate({
-            title, description, address,
-            location: {
-              lat: 5.611074,
-              lng: -0.069404
-            },
-            image: 'https://images.homify.com/image/upload/a_0,c_fill,f_auto,h_900,q_auto,w_1920/v1518452946/p/photo/image/2433418/Scene_2a.jpg',
-            userId: '4'
-          });
-          setSubmitting(false);
-        }}
-      >
-        {({ 
-          isSubmitting, errors, values: { title }, isValid
-        }) => (
-          <Form>
-            <Input
-              label="Title"
-              name="title"
-              placeholder="Enter title"
-              errorText={errors.title}
-            />
-            <Input
-              textarea
-              label="Description"
-              name="description"
-              placeholder={`Provide some information about ${title ? title : 'this place'}`}
-              errorText={errors.description}
-            />
-            <Input
-              label="Address"
-              name="address"
-              placeholder="Enter a valid address"
-              errorText={errors.address}
-            />
-            <Button type="submit" disabled={isSubmitting || !isValid}>
-              ADD PLACE
-            </Button>
-          </Form>
-        )}
-      </Formik>
-    </div>
+    <>
+      {isPlaceCreated && <Redirect to="/my-places" />}
+      <div className="place-form">
+        <Formik
+          initialValues={schemaValues}
+          validationSchema={newPlaceSchema}
+          onSubmit={async (
+            { title, description }: NewPlaceSchema,
+            { setSubmitting }
+          ) => {
+            try {
+              if(!address) throw new Error('Address not valid');
+              if(!file) throw new Error('Image not found. Upload one');
+
+              const res = await Geocode.fromAddress(address);
+              const coordinates = res.results[0].geometry.location;
+
+              const image = await uploadImage(file!);
+              if(!image) throw new Error('Image upload failed. Try again');
+
+              const addedPlace = await addPlace({
+                title, description, address, image, coordinates
+              });
+
+              if(addedPlace) {
+                notify('Place created successfully', 'success', 500);
+                setSubmitting(false);
+                setTimeout(() => {
+                  setIsPlaceCreated(true);
+                }, 800);
+              } else {
+                throw new Error('Adding failed. Try again!');
+              }
+            } catch(error) {
+              notify(error.message, 'error', 1000);
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({
+            isSubmitting, errors, values: { title }, isValid
+          }) => (
+            <Form>
+              <Input
+                label="Title"
+                name="title"
+                placeholder="Enter title"
+                errorText={errors.title}
+              />
+              <Input
+                textarea
+                label="Description"
+                name="description"
+                placeholder={`Provide some information about ${title ? title : 'this place'}`}
+                errorText={errors.description}
+              />
+              <input
+                id="file"
+                name="file"
+                type="file"
+                accept="image/png, image/jpeg"
+                onChange={handleChange}
+                placeholder="Upload an image of place"
+              />
+              <SearchBox
+                placeholder="Enter a valid address, or closest landmark"
+                setFn={setAddress}
+              />
+              {isSubmitting ? <SyncLoader size={12} /> : (
+                <Button type="submit" disabled={!isValid}>
+                  ADD PLACE
+                </Button>
+              )}
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </>
   );
 }
 
