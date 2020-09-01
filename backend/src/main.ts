@@ -24,10 +24,8 @@ async function bootstrap() {
   app.use(helmet());
   
   const config = app.get(ConfigService);
-  const { host, port } = config.get<AppConfig>('app');
+  const { port } = config.get<AppConfig>('app');
 
-  const prefix = config.get<string>('api.prefix');
-  const server = `${host}/${prefix}`;
   const description = '**API Server** for Places App - an app where users can share places *(with image and coordinates)* with other users';
 
   const options = new DocumentBuilder()
@@ -39,7 +37,6 @@ async function bootstrap() {
                         'cobygiven@gmail.com'
                       )
                       .setVersion('1.0')
-                      .addServer(server)
                       .addTag('Auth')
                       .addTag('Users')
                       .addTag('Places')
@@ -47,9 +44,8 @@ async function bootstrap() {
                       .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup(prefix, app, document);
+  SwaggerModule.setup('/', app, document);
 
-  app.setGlobalPrefix(prefix);
   app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(port);
