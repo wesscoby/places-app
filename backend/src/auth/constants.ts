@@ -1,7 +1,6 @@
-import { ConfigService } from '../shared';
+import { config } from 'dotenv'
 
-
-const config = new ConfigService();
-const secret = config.get<string>('jwt.secret');
-
-export const jwtConstants = { secret };
+config();
+export const jwtConstants = {
+  secret: process.env.JWT_SECRET
+};
