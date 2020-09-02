@@ -7,4 +7,5 @@ cache:
   - node_modules
 script:
 - cd ./backend
+- yarn
 - yarn build
