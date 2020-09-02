@@ -9,3 +9,6 @@ script:
 - cd ./backend
 - yarn
 - yarn build
+- cd ../frontend
+- yarn
+- yarn build
