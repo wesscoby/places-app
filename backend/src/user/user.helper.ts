@@ -1,10 +1,7 @@
 import * as bcrypt from 'bcrypt';
 
-import { ConfigService } from '../shared'; 
 
-
-const config = new ConfigService();
-const rounds = config.get<string>('bcrypt.rounds');
+const rounds = process.env.BCRYPT_SALT_ROUNDS;
 
 export const hashPassword = async (password: string): Promise<string> => {
   try {
@@ -18,5 +15,6 @@ export const hashPassword = async (password: string): Promise<string> => {
 export const comparePasswords = async (
   plain: string, hashed: string
 ): Promise<boolean> => {
+  console.log({rounds})
   return await bcrypt.compare(plain, hashed);
 }
