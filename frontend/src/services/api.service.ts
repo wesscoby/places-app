@@ -5,7 +5,6 @@ import {
   AuthData, AddPlaceData, UpdatePlaceData
 } from '../util';
 import { CookieService } from '.';
-import { ok } from 'assert';
 
 
 class ApiService {

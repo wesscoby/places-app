@@ -1,16 +1,11 @@
-import { ConfigType } from '@nestjs/config';
-
-
 const { env } = process;
 
 export default () => ({
   app: {
-    // host: env.API_HOST,
-    port: env.PORT
+    host: env.SERVER,
+    port: env.PORT,
+    client: env.CLIENT
   },
-  // api: {
-  //   prefix: env.API_URL_GLOBAL_PREFIX
-  // },
   database: {
     url: env.MONGODB_URL
   },
