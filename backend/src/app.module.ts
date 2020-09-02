@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule as CM, ConfigService } from '@nestjs/config';
 import { AutomapperModule as AM } from 'nestjsx-automapper';
 import { TypegooseModule as TM } from 'nestjs-typegoose';
 
+import configuration from './shared/config';
 import { PlacesModule } from './places';
 import { UserModule } from './user';
-import { ConfigService, SharedModule } from './shared';
 import { AuthModule } from './auth';
 
 
@@ -15,14 +16,11 @@ const mongooseOptions = {
   useFindAndModify: false
 }
 
-const config = new ConfigService();
-const url = config.get<string>('database.url');
-
 @Module({
   imports: [
+    CM.forRoot({ load: [configuration], isGlobal: true }),
     AM.withMapper(),
-    TM.forRoot(url, mongooseOptions),
-    SharedModule,
+    TM.forRoot(process.env.MONGODB_URL, mongooseOptions),
     UserModule,
     AuthModule,
     PlacesModule,
