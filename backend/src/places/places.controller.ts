@@ -1,6 +1,6 @@
 import { 
   Controller, Get, Post, Body, Param, 
-  Patch, Delete, UseInterceptors, Res, HttpStatus, UnauthorizedException
+  Patch, Delete, Res, HttpStatus, UnauthorizedException
 } from '@nestjs/common';
 import { 
   ApiTags, ApiOperation, ApiCreatedResponse, ApiParam, ApiBody, ApiNoContentResponse, ApiNotFoundResponse
@@ -9,13 +9,12 @@ import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { PlacesService } from './places.service';
 import { Place, PlacesModel, CreatePlaceDto, UpdatePlaceDto } from './models';
-// import { TransformInterceptor } from '../shared';
 import { Auth, ReqUser, IsAdmin, isOwnPlace } from '../auth';
+import { Validate, createPlaceSchema, updatePlaceSchema } from '../shared';
 
 
 @Controller('places')
 @ApiTags('Places')
-// @UseInterceptors(new TransformInterceptor())
 export class PlacesController {
   constructor(
     private readonly places: PlacesService,
@@ -67,6 +66,7 @@ export class PlacesController {
     description: 'The record has been successfully created.',
     type: () => Place
   })
+  @Validate(createPlaceSchema)
   async create(
     @ReqUser('id') uid: string,
     @Body() place: CreatePlaceDto
@@ -87,6 +87,7 @@ export class PlacesController {
     type: () => Place
   })
   @Auth()
+  @Validate(updatePlaceSchema)
   async update(
     @ReqUser('id') uid: string,
     @Param('pid') pid: string,

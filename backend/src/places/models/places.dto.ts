@@ -37,8 +37,8 @@ export class Place {
   readonly coordinates!: Coordinates;
 
   @AutoMap()
-  @ApiPropertyOptional()
-  readonly image?: string;
+  @ApiProperty()
+  readonly image: string;
 
   @AutoMap()
   @ApiProperty({ type: String, format: 'date-time' })
@@ -59,5 +59,5 @@ export class CreatePlaceDto extends PickType(
 ) {}
 
 export class UpdatePlaceDto extends PartialType(
-  PickType(Place, ['title', 'description', 'image'] as const)
+  PickType(Place, ['title', 'description'] as const)
 ) {}
