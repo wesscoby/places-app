@@ -26,7 +26,7 @@ const LoginForm: FC = () => {
   }
 
   const handleError = () => {
-    notify('Invalid credentials. Try again', 'error');
+    notify('Invalid credentials. Try again', 'error', 3000);
     reset();
   }
 
