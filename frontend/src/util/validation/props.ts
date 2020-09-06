@@ -20,7 +20,7 @@ export const address = Str()
                         .required('Required');
 
 export const password = Str()
-                          .min(6, 'Too short')
+                          .min(7, 'Too short')
                           .required('Password required');
 
 export const name = Str()

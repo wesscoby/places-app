@@ -1,4 +1,5 @@
 import Cookie, { CookieSetOptions } from 'universal-cookie';
+import { CryptoService } from '.';
 
 
 class CookieService {
@@ -13,8 +14,10 @@ class CookieService {
   }
 
   getAccessToken(): string | null {
-    const token = this.cookie.get('access_token');
-    return token ? token : null;
+    const token: string | null = this.cookie.get('access_token');
+    if(!token) return null;
+
+    return CryptoService.decrypt(token);
   }
 
   set(key: string, value: string, options?: CookieSetOptions) {
@@ -22,11 +25,12 @@ class CookieService {
   }
 
   setAccessToken(value: string) {
+    const encrypted = CryptoService.encrypt(value);
     const options: CookieSetOptions = {
       sameSite: 'strict',
       path: '/'
     };
-    this.cookie.set('access_token', value, options);
+    this.cookie.set('access_token', encrypted, options);
   }
 
   remove(key: string) {
