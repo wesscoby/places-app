@@ -2,6 +2,9 @@
 An application where users can share places (with image and coordinates) with other users - a MERN Stack [course][course] by [@Academind][academind]
 
 [![Build Status](https://travis-ci.com/WessCoby/places-app.svg?branch=master)](https://travis-ci.com/WessCoby/places-app)
+[![GitHub issues](https://img.shields.io/github/issues/WessCoby/places-app)](https://github.com/WessCoby/places-app/issues)
+[![GitHub stars](https://img.shields.io/github/stars/WessCoby/places-app)](https://github.com/WessCoby/places-app/stargazers)
+[![GitHub license](https://img.shields.io/github/license/WessCoby/places-app)](https://github.com/WessCoby/places-app/blob/master/LICENSE)
 
 ## About Course
 Currently learning and following the concepts in the course and coding along, but using a different approach and slightly different tools
