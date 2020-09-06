@@ -38,7 +38,6 @@
     "config": "^3.3.1",
     "csurf": "^1.11.0",
     "helmet": "^4.1.0",
-    "joi": "^17.2.1",
     "mongoose": "5.9",
     "mongoose-autopopulate": "^0.12.2",
     "mongoose-findorcreate": "^3.0.0",
@@ -52,7 +51,8 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
     "swagger-ui-express": "^4.1.4",
-    "uid-safe": "^2.1.5"
+    "uid-safe": "^2.1.5",
+    "yup": "^0.29.3"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",
@@ -62,7 +62,6 @@
     "@types/express": "^4.17.3",
     "@types/helmet": "^0.0.47",
     "@types/jest": "25.1.4",
-    "@types/joi": "^14.3.4",
     "@types/mongoose": "^5.7.36",
     "@types/node": "^13.9.1",
     "@types/passport": "^1.0.4",
@@ -70,6 +69,7 @@
     "@types/passport-local": "^1.0.33",
     "@types/supertest": "^2.0.8",
     "@types/uid-safe": "^2.1.2",
+    "@types/yup": "^0.29.6",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",
     "eslint": "^6.8.0",

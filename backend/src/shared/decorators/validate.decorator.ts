@@ -1,10 +1,10 @@
 import { applyDecorators, UsePipes } from '@nestjs/common';
-import { ObjectSchema } from 'joi';
+import { Schema } from 'yup';
 
-import { JoiValidationPipe } from '../pipes';
+import { YupValidationPipe } from '../pipes';
 
-export function Validate(schema: ObjectSchema) {
+export function Validate<T>(schema: Schema<T>) {
   return applyDecorators(
-    UsePipes(new JoiValidationPipe(schema))
+    UsePipes(new YupValidationPipe(schema))
   );
 }
