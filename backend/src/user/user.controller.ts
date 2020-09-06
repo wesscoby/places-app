@@ -1,6 +1,6 @@
 import { 
   Controller, Get, Body, Param, Patch,
-  UseInterceptors, Delete, Res, HttpStatus, BadRequestException
+  Delete, Res, HttpStatus, BadRequestException, UsePipes
 } from '@nestjs/common';
 import { 
   ApiTags, ApiOperation, ApiParam, ApiBody, ApiNoContentResponse, ApiNotFoundResponse, ApiBadRequestResponse
@@ -8,13 +8,12 @@ import {
 import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { UserService } from './user.service';
-// import { TransformInterceptor } from '../shared'
 import { UserModel, UpdateUserDto, User } from './models';
 import { Auth, Role, ReqUser } from '../auth';
+import { Validate, updateUserSchema } from '../shared';
 
 
 @Controller('users')
-// @UseInterceptors(new TransformInterceptor())
 @ApiTags('Users')
 export class UserController {
   constructor(
@@ -45,21 +44,6 @@ export class UserController {
   ): Promise<User> {
     const user = await this.users.getById(uid);
     return this.toDto(user);
-  }
-
-  @Patch(':uid')
-  @ApiOperation({
-    summary: 'Update a specific user by ID'
-  })
-  @ApiParam({ name: 'uid', description: 'User ID' })
-  @ApiBody({ type: UpdateUserDto, description: 'Data to update' })
-  @Auth()
-  async update(
-    @Param('uid') uid: string,
-    @Body() update: UpdateUserDto
-  ): Promise<User> {
-    const updated = await this.users.update(uid, update);
-    return this.toDto(updated);
   }
 
   @Delete(':uid')

@@ -1,22 +1,26 @@
 import {
-  Controller, UseGuards, Post, UseInterceptors, Get, Body, Patch
+  Controller, UseGuards, Post, Get, Body, Patch, UsePipes
 } from '@nestjs/common';
-import { ApiTags, ApiBody, ApiOperation, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import {
+  ApiTags, ApiBody, ApiOperation, ApiOkResponse, ApiCreatedResponse, ApiConflictResponse, ApiBadRequestResponse
+} from '@nestjs/swagger';
 import { InjectMapper, AutoMapper } from 'nestjsx-automapper';
 
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards';
-// import { TransformInterceptor } from '../shared';
 import {
-  LoginUserDto, CreateUserDto, UserProfile, UpdateUserDto, UserModel
+  LoginUserDto, CreateUserDto, UserProfile, UpdateUserDto,
+  UserModel
 } from '../user';
 import { ReqUser, Auth } from './decorators';
 import { AuthDto } from './models';
+import {
+  Validate, createUserSchema, updateUserSchema
+} from '../shared';
 
 
 @Controller('auth')
 @ApiTags('Auth')
-// @UseInterceptors(new TransformInterceptor())
 export class AuthController {
   constructor(
     private readonly auth: AuthService,
@@ -29,9 +33,16 @@ export class AuthController {
 
   @Post('signup')
   @ApiOperation({ description: 'New User sign up' })
+  @ApiCreatedResponse({
+    type: () => AuthDto,
+    description: 'User signed up successfully'
+  })
+  @ApiConflictResponse({ description: 'Email already exists'})
   @ApiBody({ type: () => CreateUserDto })
-  @ApiOkResponse({ type: () => AuthDto })
-  async signup(@Body() user: CreateUserDto): Promise<AuthDto> {
+  @Validate(createUserSchema)
+  async signup(
+    @Body() user: CreateUserDto
+  ): Promise<AuthDto> {
     return await this.auth.signup(user);
   }
 
@@ -60,9 +71,10 @@ export class AuthController {
   @ApiBody({ type: () => UpdateUserDto })
   @ApiOkResponse({ type: () => UserProfile })
   @Auth()
+  @Validate(updateUserSchema)
   async updateProfile(
     @ReqUser('id') uid: string,
-    @Body() update: UpdateUserDto
+    @Body()  update: UpdateUserDto
   ): Promise<UserProfile> {
     const user = await this.auth.updateProfile(uid, update);
     return this.toDto(user);

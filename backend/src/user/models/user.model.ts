@@ -21,11 +21,11 @@ import { Role } from '../../auth';
     this.password = await hashPassword(this.password);
     return next();
   } catch(error) { 
-    next(error); 
+    next(error);
   }
 })
 export class UserModel extends BaseModel<UserModel> {
-  @prop()
+  @prop({ trim: true })
   @AutoMap()
   public name!: string;
 

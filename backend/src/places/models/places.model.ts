@@ -41,7 +41,7 @@ export class PlacesModel extends BaseModel<PlacesModel> {
 
   @AutoMap()
   @prop()
-  public image?: string;
+  public image!: string;
 
   @AutoMap(() => UserModel)
   @prop({ 

@@ -47,7 +47,7 @@ export class PlacesService extends BaseService<PlacesModel> {
   }
 
   async updatePlace(
-    pid: string, { title, description, image}: UpdatePlaceDto
+    pid: string, { title, description }: UpdatePlaceDto
   ): Promise<PlacesModel> {
     try {
       const place = await this.places.findById(this.ID(pid));
@@ -57,7 +57,6 @@ export class PlacesService extends BaseService<PlacesModel> {
 
       place.title = title ?? place.title;
       place.description = description ?? place.description;
-      place.image = image ?? place.image;
 
       await place.save();
       return place.toJSON();
