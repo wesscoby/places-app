@@ -4,7 +4,8 @@ import { Switch } from 'react-router-dom';
 import Public from './public';
 import Authenticated from './authenticated';
 import {
-  Users, UserPlaces, NewPlace, UpdatePlace, Auth, MyPlaces, FourOhFour
+  Users, UserPlaces, NewPlace, UpdatePlace, Auth,
+  Places, MyPlaces, FourOhFour
 } from '../ui/pages';
 import { useGetUserProfile } from '../hooks';
 import { AuthContext } from '../context';
@@ -21,7 +22,8 @@ const Routes: FC = () => {
 
   return (
     <Switch>
-      <Public path="/" exact component={Users} />
+      <Public path="/" exact component={Places} />
+      <Public path="/users" exact component={Users} />
       <Public
         path="/:uid/places" exact
         component={UserPlaces}
