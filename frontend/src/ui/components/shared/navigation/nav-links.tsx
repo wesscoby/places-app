@@ -9,7 +9,7 @@ const NavLinks: FC = () => {
   return (
     <ul className="nav-links">
       <li>
-        <NavLink to="/" exact>ALL USERS</NavLink>
+        <NavLink to="/users" exact>ALL USERS</NavLink>
       </li>
       {isAuthenticated() && (
         <>
