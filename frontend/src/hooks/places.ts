@@ -4,6 +4,12 @@ import { AddPlaceData, UpdatePlaceData } from '../util';
 import { ApiService } from '../services';
 
 
+export function useGetAllPlaces() {
+  return useQuery(
+    ['places'], async() => await ApiService.getAllPlaces()
+  );
+}
+
 export function useFetchPlaceById(pid: string) {
   return useQuery(
     ["places", {pid}],
