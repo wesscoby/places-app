@@ -20,7 +20,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  avatar?: string;
+  avatar: string;
   places: Place[];
 }
 
@@ -48,7 +48,7 @@ export interface UserProfile {
   id: string;
   name: string;
   email: string;
-  avatar?: string;
+  avatar: string;
   role: Role;
 }
 

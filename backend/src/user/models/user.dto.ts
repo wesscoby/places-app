@@ -22,8 +22,8 @@ export class User {
   readonly email!: string;
 
   @AutoMap()
-  @ApiPropertyOptional()
-  readonly avatar?: string;
+  @ApiProperty()
+  readonly avatar!: string;
 
   @ApiProperty({ enum: Role, default: Role.USER })
   readonly role!: Role;
@@ -45,7 +45,7 @@ export class LoginUserDto extends PickType(User, ['email'] as const) {
 }
 
 export class CreateUserDto extends PickType(
-  User, ['name', 'email', 'avatar'] as const
+  User, ['name', 'email'] as const
 ) {
   @ApiProperty()
   readonly password: string;
@@ -69,8 +69,8 @@ export class UserProfile {
   readonly email!: string;
 
   @AutoMap()
-  @ApiPropertyOptional()
-  readonly avatar?: string;
+  @ApiProperty()
+  readonly avatar!: string;
 
   @AutoMap()
   @ApiProperty({ enum: Role, default: Role.USER })
