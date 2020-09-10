@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Formik, Form } from 'formik';
-import { SyncLoader } from 'react-spinners';
+import { ScaleLoader } from 'react-spinners';
 
 import { loginSchema, notify } from '../../../util';
 import { Input, Button } from '..';
@@ -68,7 +68,7 @@ const LoginForm: FC = () => {
                 placeholder="Enter your password"
                 errorText={errors.password}
               />
-              {isSubmitting ? <SyncLoader size={10} /> : (
+              {isSubmitting ? <ScaleLoader color="#ff0055" /> : (
                 <Button type="submit" disabled={!isValid}>
                   LOGIN
                 </Button>

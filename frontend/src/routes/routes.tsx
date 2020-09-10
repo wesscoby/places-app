@@ -5,7 +5,7 @@ import Public from './public';
 import Authenticated from './authenticated';
 import {
   Users, UserPlaces, NewPlace, UpdatePlace, Auth,
-  Places, MyPlaces, FourOhFour
+  Places, FourOhFour
 } from '../ui/pages';
 import { useGetUserProfile } from '../hooks';
 import { AuthContext } from '../context';
@@ -24,23 +24,10 @@ const Routes: FC = () => {
     <Switch>
       <Public path="/" exact component={Places} />
       <Public path="/users" exact component={Users} />
-      <Public
-        path="/:uid/places" exact
-        component={UserPlaces}
-      />
-      <Authenticated path="/my-places" component={MyPlaces} />
-      <Authenticated
-        path="/places/new" exact 
-        component={NewPlace}
-      />
-      <Authenticated
-        path="/places/:pid" 
-        component={UpdatePlace}
-      />
-      <Public
-        path="/auth" exact
-        component={Auth}
-      />
+      <Public path="/:uid/places" exact component={UserPlaces} />
+      <Authenticated path="/places/new" exact component={NewPlace} />
+      <Authenticated path="/places/:pid" exact component={UpdatePlace} />
+      <Public path="/auth" exact component={Auth} />
       <Public component={FourOhFour} />
     </Switch>
   );

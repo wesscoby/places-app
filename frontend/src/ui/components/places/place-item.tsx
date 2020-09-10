@@ -53,7 +53,7 @@ const PlaceItem: FC<Props> = ({
 
   return (
     <>
-      {isPlaceDeleted && <Redirect to="/my-places" />}
+      {isPlaceDeleted && <Redirect to={`/${user!.id}/places`} />}
       <Modal
         show={showMap}
         onCancel={closeMapHandler}

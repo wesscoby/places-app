@@ -5,7 +5,7 @@ import { AuthContext } from '../../../../context';
 
 
 const NavLinks: FC = () => {
-  const { isAuthenticated, logout } = useContext(AuthContext);
+  const { isAuthenticated, logout, user } = useContext(AuthContext);
   return (
     <ul className="nav-links">
       <li>
@@ -14,7 +14,7 @@ const NavLinks: FC = () => {
       {isAuthenticated() && (
         <>
           <li>
-            <NavLink to="/my-places" exact>MY PLACES</NavLink>
+            <NavLink to={`/${user!.id}/places`} exact>MY PLACES</NavLink>
           </li>
           <li>
             <NavLink to="/places/new" exact>ADD PLACE</NavLink>
@@ -23,7 +23,7 @@ const NavLinks: FC = () => {
       )}
       {!isAuthenticated() && (
         <li>
-          <NavLink to="/auth">AUTHENTICATE</NavLink>
+          <NavLink to="/auth">LOGIN</NavLink>
         </li>
       )}
       {isAuthenticated() && (
