@@ -1,7 +1,7 @@
 import React, { FC, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { Formik, Form } from 'formik';
-import { SyncLoader } from 'react-spinners';
+import { ScaleLoader } from 'react-spinners';
 import { Redirect } from 'react-router-dom';
 
 import { Input, Button, Card, Spinner } from '../../components';
@@ -91,7 +91,7 @@ const UpdatePlace: FC = () => {
                 placeholder={`Provide some information about ${title ? title : 'this place'}`}
                 errorText={errors.description}
               />
-              {isSubmitting ? <SyncLoader size={12} /> : (
+              {isSubmitting ? <ScaleLoader color="#ff0055" /> : (
                 <Button type="submit" disabled={!isValid}>
                   UPDATE PLACE
                 </Button>
