@@ -1,10 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import { SyncLoader } from 'react-spinners';
 import { Redirect } from 'react-router-dom';
 
 import { Input, Button, Card, Spinner } from '../../components';
+import { AuthContext } from '../../../context';
 import { updatePlaceSchema, notify } from '../../../util';
 import { useFetchPlaceById, useUpdatePlace } from '../../../hooks';
 
@@ -19,6 +20,7 @@ interface UpdatePlaceSchema {
 }
 
 const UpdatePlace: FC = () => {
+  const { user } = useContext(AuthContext);
   const { pid } = useParams<ParamTypes>();
   const { error, isLoading, data } = useFetchPlaceById(pid);
   const [isPlaceUpdated, setPlaceUpdated] = useState(false);
@@ -42,7 +44,7 @@ const UpdatePlace: FC = () => {
 
   return (
     <>
-      {isPlaceUpdated && <Redirect to="/my-places" />}
+      {isPlaceUpdated && <Redirect to={`/${user!.id}/places`} />}
       <div className="place-form">
         <Formik
           initialValues={schemaValues}
