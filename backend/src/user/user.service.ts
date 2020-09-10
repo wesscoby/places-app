@@ -5,6 +5,7 @@ import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType as RMT } from '@typegoose/typegoose';
 
 import { User, UserModel, CreateUserDto, UpdateUserDto } from './models';
+import { GravatarService } from './gravatar.service';
 import { comparePasswords } from './user.helper';
 import { BaseService } from '../shared';
 import { PlacesService as PS } from '../places';
@@ -14,7 +15,8 @@ import { PlacesService as PS } from '../places';
 export class UserService extends BaseService<UserModel> {
   constructor(
     @InjectModel(UserModel) private readonly users: RMT<typeof UserModel>,
-    @Inject(forwardRef(() => PS)) private readonly places: PS
+    @Inject(forwardRef(() => PS)) private readonly places: PS,
+    private readonly gravatar: GravatarService
   ) {
     super(users);
   }
@@ -28,7 +30,8 @@ export class UserService extends BaseService<UserModel> {
 
   async create(user: CreateUserDto): Promise<User> {
     try {
-      const newUser = await this.users.findOrCreate(user);
+      const avatar = await this.gravatar.get(user.email, user.name);
+      const newUser = await this.users.findOrCreate({...user, avatar });
       return newUser.doc.toJSON();
     } catch(error) {
       throw new ConflictException(

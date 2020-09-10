@@ -38,7 +38,7 @@ export class UserModel extends BaseModel<UserModel> {
 
   @prop()
   @AutoMap()
-  public avatar?: string;
+  public avatar!: string;
 
   @prop({ enum: Role, default: Role.USER })
   @AutoMap()
