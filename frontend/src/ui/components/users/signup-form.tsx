@@ -1,6 +1,7 @@
 import React, { FC, useContext } from 'react';
 import { Formik, Form } from 'formik';
 import { Redirect } from 'react-router-dom';
+import { ScaleLoader } from 'react-spinners';
 
 import { signupSchema, notify } from '../../../util';
 import { Input, Button } from '..';
@@ -14,7 +15,7 @@ interface SignupSchema {
   password: string;
 }
 
-const LoginForm: FC = () => {
+const SignupForm: FC = () => {
   const [userSignup, { reset }] = useRegisterUser();
   const { setUser, isAuthenticated } = useContext(AuthContext);
 
@@ -73,9 +74,11 @@ const LoginForm: FC = () => {
                 placeholder="Enter your password"
                 errorText={errors.password}
               />
-              <Button type="submit" disabled={isSubmitting || !isValid}>
-                SIGNUP
-              </Button>
+              {isSubmitting ? <ScaleLoader color="#ff0055" /> : (
+                <Button type="submit" disabled={!isValid}>
+                  SIGNUP
+                </Button>
+              )}
             </Form>
           </>
         )}
@@ -84,4 +87,4 @@ const LoginForm: FC = () => {
   );
 }
 
-export default LoginForm;
+export default SignupForm;

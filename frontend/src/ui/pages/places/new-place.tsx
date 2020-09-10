@@ -1,11 +1,12 @@
-import React, { FC, ChangeEvent, useState } from 'react';
+import React, { FC, ChangeEvent, useState, useContext } from 'react';
 import { Formik, Form } from 'formik';
 import Geocode from "react-geocode";
-import { SyncLoader } from 'react-spinners';
+import { ScaleLoader } from 'react-spinners';
 import { Redirect } from 'react-router-dom';
 import "@reach/combobox/styles.css";
 
 import { Input, Button, SearchBox } from '../../components';
+import { AuthContext } from '../../../context';
 import { newPlaceSchema, notify } from '../../../util';
 import { useAddPlace, useImageUpload } from '../../../hooks';
 
@@ -16,6 +17,7 @@ interface NewPlaceSchema {
 }
 
 const NewPlace: FC = () => {
+  const { user } = useContext(AuthContext);
   const [addPlace] = useAddPlace();
   const [uploadImage] = useImageUpload();
   const [file, setFile] = useState<File | null>(null);
@@ -35,7 +37,7 @@ const NewPlace: FC = () => {
 
   return (
     <>
-      {isPlaceCreated && <Redirect to="/my-places" />}
+      {isPlaceCreated && <Redirect to={`/${user!.id}/places`} />}
       <div className="place-form">
         <Formik
           initialValues={schemaValues}
@@ -102,7 +104,7 @@ const NewPlace: FC = () => {
                 placeholder="Enter a valid address, or closest landmark"
                 setFn={setAddress}
               />
-              {isSubmitting ? <SyncLoader size={12} /> : (
+              {isSubmitting ? <ScaleLoader color="#ff0055" /> : (
                 <Button type="submit" disabled={!isValid}>
                   ADD PLACE
                 </Button>
