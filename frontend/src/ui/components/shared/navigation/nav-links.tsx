@@ -23,7 +23,7 @@ const NavLinks: FC = () => {
       )}
       {!isAuthenticated() && (
         <li>
-          <NavLink to="/auth">AUTHENTICATE</NavLink>
+          <NavLink to="/auth">LOGIN</NavLink>
         </li>
       )}
       {isAuthenticated() && (
