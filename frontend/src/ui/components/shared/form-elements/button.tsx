@@ -8,7 +8,7 @@ interface Props {
   onClick?: OnClickEvent;
   href?: string;
   to?: string;
-  size?: number;
+  size?: "big" | "small";
   inverse?: boolean;
   danger?: boolean;
   type?: "button" | "submit" | "reset";

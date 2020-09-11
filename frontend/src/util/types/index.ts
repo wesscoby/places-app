@@ -14,6 +14,8 @@ export interface Place {
   coordinates: LatLng;
   image: string;
   creator: User;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface User {

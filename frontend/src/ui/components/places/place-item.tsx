@@ -1,5 +1,6 @@
 import React, { FC, useState, useContext } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { FaMapMarkedAlt, RiDeleteBin2Fill, FaEdit } from 'react-icons/all';
 
 import { Card, Button, Modal, Map } from '../';
 import { Place, notify } from '../../../util';
@@ -100,13 +101,26 @@ const PlaceItem: FC<Props> = ({
             <p>{description}</p>
           </div>
           <div className="place-item__actions">
-            <Button inverse onClick={openMapHandler}>VIEW ON MAP</Button>
-            {canUpdatePlace() && <Button to={`/places/${id}`}>EDIT</Button>}
-            {canDeletePlace() && (
-              <Button danger onClick={showDeleteWarningHandler}>
-                DELETE
+            <div className="user-avatar">
+              <Link to={`/${creator.id}/places`}>
+                <img src={creator.avatar} alt=""/>
+              </Link>
+            </div>
+            <div className="">
+              <Button inverse onClick={openMapHandler} size="small">
+                <FaMapMarkedAlt />
               </Button>
-            )}
+              {canUpdatePlace() && (
+                <Button to={`/places/${id}`} size="small">
+                  <FaEdit />
+                </Button>
+              )}
+              {canDeletePlace() && (
+                <Button danger onClick={showDeleteWarningHandler} size="small">
+                  <RiDeleteBin2Fill />
+                </Button>
+              )}
+            </div>
           </div>
         </Card>
       </li>

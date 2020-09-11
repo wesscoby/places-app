@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { PlaceItem, Card, Button  } from '..';
-import { Place } from '../../../util';
+import { Place, byDate } from '../../../util';
 
 
 interface Props {
@@ -22,7 +22,8 @@ const PlaceList: FC<Props> = ({ items }) => {
 
   return (
     <ul className="place-list">
-      {items.map(place => (
+      {console.log({ places: items })}
+      {items.sort(byDate).map(place => (
         <PlaceItem key={place.id} place={place} />
       ))}
     </ul>
