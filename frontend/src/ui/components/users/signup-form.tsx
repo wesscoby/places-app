@@ -26,7 +26,7 @@ const SignupForm: FC = () => {
   }
 
   const handleError = () => {
-    notify('Please check your credentials and try again', 'error', 3000);
+    notify('Please check your credentials and try again', 'error', 5000);
     reset();
   }
 
@@ -58,7 +58,7 @@ const SignupForm: FC = () => {
               <Input
                 label="Name"
                 name="name"
-                placeholder="Enter your full name"
+                placeholder="Enter your name (first, full or nickname)"
                 errorText={errors.name}
               />
               <Input

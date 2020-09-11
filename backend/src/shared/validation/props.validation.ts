@@ -16,7 +16,7 @@ export const coordinates = Obj<Coordinates>().shape({
   lng: Num().required()
 });
 
-export const title = Str().trim().min(10).max(50);
+export const title = Str().trim().min(6).max(50);
 
 export const description = Str().trim().min(30).max(350);
 

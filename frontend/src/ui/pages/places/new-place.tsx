@@ -1,11 +1,11 @@
-import React, { FC, ChangeEvent, useState, useContext } from 'react';
+import React, { FC, useState, useContext } from 'react';
 import { Formik, Form } from 'formik';
 import Geocode from "react-geocode";
 import { ScaleLoader } from 'react-spinners';
 import { Redirect } from 'react-router-dom';
 import "@reach/combobox/styles.css";
 
-import { Input, Button, SearchBox } from '../../components';
+import { Input, Button, SearchBox, ImageUpload } from '../../components';
 import { AuthContext } from '../../../context';
 import { newPlaceSchema, notify } from '../../../util';
 import { useAddPlace, useImageUpload } from '../../../hooks';
@@ -29,11 +29,6 @@ const NewPlace: FC = () => {
     title: '',
     description: '',
   };
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.currentTarget.files![0];
-    setFile(file);
-  }
 
   return (
     <>
@@ -70,7 +65,7 @@ const NewPlace: FC = () => {
                 throw new Error('Adding failed. Try again!');
               }
             } catch(error) {
-              notify(error.message, 'error', 1000);
+              notify(error.message, 'error', 5000);
               setSubmitting(false);
             }
           }}
@@ -92,14 +87,7 @@ const NewPlace: FC = () => {
                 placeholder={`Provide some information about ${title ? title : 'this place'}`}
                 errorText={errors.description}
               />
-              <input
-                id="file"
-                name="file"
-                type="file"
-                accept="image/png, image/jpeg"
-                onChange={handleChange}
-                placeholder="Upload an image of place"
-              />
+              <ImageUpload id="image" center setter={setFile} />
               <SearchBox
                 placeholder="Enter a valid address, or closest landmark"
                 setFn={setAddress}
