@@ -2,7 +2,7 @@ import { string as Str } from 'yup';
 
 
 export const title = Str()
-                      .min(10, 'Too short [Minimum length: 10 characters]')
+                      .min(6, 'Too short [Minimum length: 6 characters]')
                       .max(50, 'Too long [Maximum length: 50 characters]')
                       .required('Required');
 
