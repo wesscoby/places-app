@@ -1,3 +1,4 @@
 export { default as Button } from './button';
 export { default as Input } from './input';
 export { default as SearchBox } from './address-search-box';
+export { default as ImageUpload } from './image-upload';
