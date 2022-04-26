@@ -17,7 +17,7 @@ interface AppConfig {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
-  const { host, port, client } = config.get<AppConfig>('app');
+  const { port, client } = config.get<AppConfig>('app');
 
   const corsOptions = {
     origin: [client],
@@ -40,7 +40,9 @@ async function bootstrap() {
                         'cobygiven@gmail.com'
                       )
                       .setVersion('1.0')
-                      .addServer(host)
+                      .addServer('http://localhost:5000', 'Development Server')
+                      .addServer('https://places-app-backend.herokuapp.com', 'Production - Heroku Domain')
+                      .addServer('https://places-api.wess.link', 'Production - Custom Domain')
                       .addTag('Auth')
                       .addTag('Users')
                       .addTag('Places')
