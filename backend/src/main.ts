@@ -40,9 +40,9 @@ async function bootstrap() {
                         'cobygiven@gmail.com'
                       )
                       .setVersion('1.0')
-                      .addServer('http://localhost:5000', 'Development Server')
-                      .addServer('https://places-app-backend.herokuapp.com', 'Production - Heroku Domain')
-                      .addServer('https://api.places.wess.link', 'Production - Custom Domain')
+                      .addServer('http://localhost:5000', 'Development')
+                      .addServer('https://api.places.wess.link', 'Production')
+                      .addServer('https://places-app-backend.herokuapp.com', 'Production - Heroku')
                       .addTag('Auth')
                       .addTag('Users')
                       .addTag('Places')
