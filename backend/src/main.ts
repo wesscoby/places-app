@@ -42,7 +42,7 @@ async function bootstrap() {
                       .setVersion('1.0')
                       .addServer('http://localhost:5000', 'Development Server')
                       .addServer('https://places-app-backend.herokuapp.com', 'Production - Heroku Domain')
-                      .addServer('https://places-api.wess.link', 'Production - Custom Domain')
+                      .addServer('https://api.places.wess.link', 'Production - Custom Domain')
                       .addTag('Auth')
                       .addTag('Users')
                       .addTag('Places')
